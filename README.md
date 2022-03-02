@@ -6,8 +6,6 @@ A short description of each of the folders within this repository:
 ## NGS Course Projects
 This folder contains the projects completed in the course 'Next Generation Sequence Analysis' BIGY7653 at New York University. See below for a short description of each of the projects that have been completed and what the goals of each project were. 
 
-### BAM to SAM conversion (W1)
--Convert a file from bam to sam
          
 ### Align reads to the human reference genome (W3)
 -prepare a copy human reference genome for short read alignment with the Burrows-Wheeler Aligner BWA-MEM (Homo_sapiens.GRCh38), normalize using  Picard-Tools NormalizeFasta program: https://broadinstitute.github.io/picard/command-line-overview.html#NormalizeFasta. Picard removes any white spaces in sequence identifers in the reference FASTA.<br> 
