@@ -1,0 +1,85 @@
+---
+title: "Ancestry Diagrams (W5)"
+output: html_notebook
+---
+The purpose of this notebook is to build an ancestry diagram from genotype likelihoods.
+
+
+```{r}
+#This code produces the graph for k=3  with a larger sample that includes the following populations from the 1000 genomes project
+  # ASW = Americans of African Ancestry in SW USA
+  #CEU = Utah residents (CEPH) with Northern and Western European      ancestry
+  #CHB = Han Chinese in Beijing
+  #MXL = Mexican Ancestry from Los Angeles USA
+  #YRI = Yoruba in Ibadan, Nigeria
+
+library(tidyverse)
+
+pop.tbl_df <- read_delim(file = "Demo2pop.info",delim = " ", col_names = FALSE)
+qopt.tbl_df <- read_delim(file = "Demo2NGSadmix_3_nowhite.qopt",delim = " ", col_names = F)
+qopt.tbl_df <- bind_cols(pop.tbl_df,qopt.tbl_df)
+names(qopt.tbl_df) <- c("pop","sample","g1","g2","g3")
+
+# Pipe qopt tibble to pivot_longer to "pivot" the data to "long" format
+# pipe syntax in R: https://magrittr.tidyverse.org/reference/pipe.html
+qopt.tbl_df.long <- qopt.tbl_df %>% 
+                      pivot_longer(cols = g1:g3, names_to = 'group', values_to = 'fraction')
+
+# Pipe pivoted ("long") output to ggplot
+qopt.tbl_df.long %>%
+  ggplot(aes(x=sample,y=fraction,fill=group)) + geom_col(color = "gray", size = 0.1) +
+    facet_grid(~ pop, scales = "free", space = "free") +   
+     theme_bw() +
+    theme(panel.grid.major=element_blank(),
+        panel.grid.minor=element_blank(),
+        axis.text.x = element_text(angle = 90,size=2))
+
+```
+```{r}
+#Graph for K=4
+
+pop.tbl_df <- read_delim(file = "Demo2pop.info",delim = " ", col_names = FALSE)
+qopt.tbl_df <- read_delim(file = "Demo2NGSadmix_4_nowhite.qopt",delim = " ", col_names = F)
+qopt.tbl_df <- bind_cols(pop.tbl_df,qopt.tbl_df)
+names(qopt.tbl_df) <- c("pop","sample","g1","g2","g3","g4")
+
+
+qopt.tbl_df.long <- qopt.tbl_df %>% 
+                      pivot_longer(cols = g1:g4, names_to = 'group', values_to = 'fraction')
+
+
+qopt.tbl_df.long %>%
+  ggplot(aes(x=sample,y=fraction,fill=group)) + geom_col(color = "gray", size = 0.1) +
+    facet_grid(~ pop, scales = "free", space = "free") +   
+    theme_bw() +
+    theme(panel.grid.major=element_blank(),
+        panel.grid.minor=element_blank(),
+        axis.text.x = element_text(angle = 90,size=2))
+
+```
+
+```{r}
+#Ancestry diagram for k=5
+
+
+library(tidyverse)
+
+
+pop.tbl_df <- read_delim(file = "Demo2pop.info",delim = " ", col_names = FALSE)
+qopt.tbl_df <- read_delim(file = "Demo2NGSadmix_5_nowhite.qopt",delim = " ", col_names = F)
+qopt.tbl_df <- bind_cols(pop.tbl_df,qopt.tbl_df)
+names(qopt.tbl_df) <- c("pop","sample","g1","g2","g3","g4","g5")
+
+qopt.tbl_df.long <- qopt.tbl_df %>% 
+                      pivot_longer(cols = g1:g5, names_to = 'group', values_to = 'fraction')
+
+qopt.tbl_df.long %>%
+  ggplot(aes(x=sample,y=fraction,fill=group)) + geom_col(color = "gray", size = 0.1) +
+    facet_grid(~ pop, scales = "free", space = "free") +   
+    theme_bw() +
+    theme(panel.grid.major=element_blank(),
+        panel.grid.minor=element_blank(),
+        axis.text.x = element_text(angle = 90,size=2))
+
+```
+
