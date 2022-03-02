@@ -6,7 +6,7 @@ A short description of each of the folders within this repository:
 ## NGS Course Projects
 This folder contains the projects completed in the course 'Next Generation Sequence Analysis' BIGY7653 at New York University. See below for a short description of each of the projects that have been completed and what the goals of each project were. 
 
-### BAMto SAM conversion (W1)
+### BAM to SAM conversion (W1)
 -Convert a file from bam to sam
          
 ### Align reads to the human reference genome (W3)
