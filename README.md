@@ -20,16 +20,16 @@ This folder contains the projects completed in the course 'Next Generation Seque
 ### Call snps and genotypes (W4)
 -Call snps and genotypes (with GenotypeGVCFs) from 30 samples from the 1000 Human Genomes Project<br> 
 -Apply a set of hard filters to the callset<br> 
--Workflow steps:
-  -Align reads with BWA-MEM
-  -Coordinate-sort
-  -Mark PCR duplicates
-  -Base Quality Score Recalibration (BQSR)
-  -Run HaplotypeCaller to create .gvcf files
-  -Run CombineGVCFs
-  -Run GenotypeGVCFs
-  -Perform Variant Quality Score Recalibration
-  -Perform hard filtering of VCF
+-Workflow steps:<br> 
+  -Align reads with BWA-MEM<br> 
+  -Coordinate-sort<br> 
+  -Mark PCR duplicates<br> 
+  -Base Quality Score Recalibration (BQSR)<br> 
+  -Run HaplotypeCaller to create .gvcf files<br> 
+  -Run CombineGVCFs<br> 
+  -Run GenotypeGVCFs<br> 
+  -Perform Variant Quality Score Recalibration<br> 
+  -Perform hard filtering of VCF<br> 
   
   
 ### Population Genomics (W5)
