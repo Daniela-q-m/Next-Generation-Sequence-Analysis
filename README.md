@@ -12,9 +12,9 @@ This folder contains the projects completed in the course 'Next Generation Seque
 ### Align reads to the human reference genome (W3)
 -prepare a copy human reference genome for short read alignment with the Burrows-Wheeler Aligner BWA-MEM (Homo_sapiens.GRCh38), normalize using  Picard-Tools NormalizeFasta program: https://broadinstitute.github.io/picard/command-line-overview.html#NormalizeFasta. Picard removes any white spaces in sequence identifers in the reference FASTA.<br> 
 -Create a FASTA index and a bwa index for the normalized reference genome as well as dictionary file required by the Genome Analysis Toolkit (GATK).<br> 
-  nbsp Requirements for the reference by GATK: https://gatk.broadinstitute.org/hc/en-us/articles/360035531652-FASTA-Reference-genome-format<br> 
-  nbsp Samtools manual for the samtools faidx command: http://www.htslib.org/doc/samtools.html<br> 
-  nbsp BWA manual for bwa index here: http://bio-bwa.sourceforge.net/bwa.shtml<br> 
+  &nbsp; Requirements for the reference by GATK: https://gatk.broadinstitute.org/hc/en-us/articles/360035531652-FASTA-Reference-genome-format<br> 
+  &nbsp; Samtools manual for the samtools faidx command: http://www.htslib.org/doc/samtools.html<br> 
+  &nbsp; BWA manual for bwa index here: http://bio-bwa.sourceforge.net/bwa.shtml<br> 
 -Count reads<br> 
  
 ### Call snps and genotypes (W4)
