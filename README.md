@@ -12,24 +12,24 @@ This folder contains the projects completed in the course 'Next Generation Seque
 ### Align reads to the human reference genome (W3)
 -prepare a copy human reference genome for short read alignment with the Burrows-Wheeler Aligner BWA-MEM (Homo_sapiens.GRCh38), normalize using  Picard-Tools NormalizeFasta program: https://broadinstitute.github.io/picard/command-line-overview.html#NormalizeFasta. Picard removes any white spaces in sequence identifers in the reference FASTA.<br> 
 -Create a FASTA index and a bwa index for the normalized reference genome as well as dictionary file required by the Genome Analysis Toolkit (GATK).<br> 
-  Requirements for the reference by GATK: https://gatk.broadinstitute.org/hc/en-us/articles/360035531652-FASTA-Reference-genome-format<br> 
-  Samtools manual for the samtools faidx command: http://www.htslib.org/doc/samtools.html<br> 
-  BWA manual for bwa index here: http://bio-bwa.sourceforge.net/bwa.shtml<br> 
+  nbsp Requirements for the reference by GATK: https://gatk.broadinstitute.org/hc/en-us/articles/360035531652-FASTA-Reference-genome-format<br> 
+  nbsp Samtools manual for the samtools faidx command: http://www.htslib.org/doc/samtools.html<br> 
+  nbsp BWA manual for bwa index here: http://bio-bwa.sourceforge.net/bwa.shtml<br> 
 -Count reads<br> 
  
 ### Call snps and genotypes (W4)
 -Call snps and genotypes (with GenotypeGVCFs) from 30 samples from the 1000 Human Genomes Project<br> 
 -Apply a set of hard filters to the callset<br> 
 -Workflow steps:<br> 
-  -Align reads with BWA-MEM<br> 
-  -Coordinate-sort<br> 
-  -Mark PCR duplicates<br> 
-  -Base Quality Score Recalibration (BQSR)<br> 
-  -Run HaplotypeCaller to create .gvcf files<br> 
-  -Run CombineGVCFs<br> 
-  -Run GenotypeGVCFs<br> 
-  -Perform Variant Quality Score Recalibration<br> 
-  -Perform hard filtering of VCF<br> 
+  nbsp -Align reads with BWA-MEM<br> 
+  nbsp -Coordinate-sort<br> 
+  nbsp -Mark PCR duplicates<br> 
+  nbsp -Base Quality Score Recalibration (BQSR)<br> 
+  nbsp -Run HaplotypeCaller to create .gvcf files<br> 
+  nbsp -Run CombineGVCFs<br> 
+  nbsp -Run GenotypeGVCFs<br> 
+  nbsp -Perform Variant Quality Score Recalibration<br> 
+  nbsp -Perform hard filtering of VCF<br> 
   
   
 ### Population Genomics (W5)
