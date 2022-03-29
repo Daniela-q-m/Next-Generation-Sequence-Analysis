@@ -1,0 +1,31 @@
+---
+title: "W9 Differential Gene Expression Analysis w DESeq2"
+output: html_notebook
+---
+
+The count matrices for this analysis were downloaded from the NYU HPC and saved in a local folder titled source_files in this same working directory. 
+```{r}
+library(DESeq2)
+```
+
+
+```{r}
+sampleFiles <- paste(c('PDAC253','PDAC282','PDAC286','PDAC316','PDAC266','PDAC273','PDAC306','PDAC318'),'.htseq_count.txt',sep="")
+sampleCondition <- c(rep('highSucrose',4),rep('lowSucrose',4))
+sampleTable <- data.frame(sampleName = sampleFiles,
+                          fileName = sampleFiles,
+                          condition = sampleCondition)
+```
+```{r}
+sampleTable #Visualizing Sample Table 
+```
+```{r}
+dds <- DESeqDataSetFromHTSeqCount(
+  sampleTable = sampleTable,
+  directory='/Users/danielaquijano/Documents/Github/Next-Generation-Sequence-Analysis/NGS_Course_Projects/Differential Gene Expression Analysis (W9)/source_files',
+  design = ~ condition)
+```
+```{r}
+dds
+```
+
