@@ -8,7 +8,7 @@ The count matrices for this analysis were downloaded from the NYU HPC and saved 
 library(DESeq2)
 ```
 
-
+#Create a DESeqDataSet object
 ```{r}
 sampleFiles <- paste(c('PDAC253','PDAC282','PDAC286','PDAC316','PDAC266','PDAC273','PDAC306','PDAC318'),'.htseq_count.txt',sep="")
 sampleCondition <- c(rep('highSucrose',4),rep('lowSucrose',4))
@@ -28,4 +28,58 @@ dds <- DESeqDataSetFromHTSeqCount(
 ```{r}
 dds
 ```
+dds is a DESeq dataset, 28595 rows by 8 cols.
+
+Test the null hypothesis that there is no effect of sugar type (i.e, \(B_1\) = 0) on gene expression for each gene in the genome annotation. In the DESeq2 framework, we are testing the null hypothesis of a fold-change of zero separately for each gene in the genome between high sucrose and low sucrose fruits.
+
+```{r}
+class(dds)
+```
+## Pre-filter low count genes, normalize counts and run DESeq
+
+```{r}
+#removing genes with 10 or fewer reads
+keep <- rowSums(counts(dds)) >= 10
+dds <- dds[keep,]
+```
+
+
+```{r}
+#run the DESeq wrapper function. 
+
+dds <- DESeq(dds)
+class(dds) # Determine the type of object
+```
+Obtain raw counts and normalized counts from dds DESeq2 object.
+```{r}
+rawcounts.matrix <- counts(dds,normalized=F)
+normalizedcounts.matrix <- counts(dds,normalized=T)
+class(rawcounts.matrix)
+```
+
+```{r}
+dds
+```
+As seen above, 28595 -20029=8566 genes were removed after filtering and normalization. 20029 genes were retained. 
+
+##Analyze DGE data
+Cluster samples using hierarchical clustering and Principal Components Analysis (PCA). This can help provide an indication of the distances between sample gene expression profiles and help detect potential batch effects.
+Recommended that the normalized count matrix should be transformed with “regularized log” (?rlog) or “variance stabilizing” (?varianceStabilizingTransformation) transformation before clustering.
+```{r}
+# “rlog” transform the normalized counts and perform hierarchical clustering of samples:
+rld <- rlog(dds)
+dists <- dist(t(assay(rld)))
+plot(hclust(dists))
+```
+Cluster samples using the plotPCA function (?plotPCA) and color the points by high or low sucrose content samples 
+
+
+
+
+
+
+
+
+
+
 
