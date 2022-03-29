@@ -41,3 +41,9 @@ This folder contains the projects completed in the course 'Next Generation Seque
 -Calculate depth per base position using a single samtools depth command for the region chromosome_1:10001-10020 from the sample alignment for Chlamydomonas strain<br> 
 -Calculate coverage depth in genomic intervals to identify a copy number variant <br> 
 
+
+
+### Genome Alignment (Using STAR) (W8)
+-Align and coordinate sort RNA-seq reads to a reference genome assembly with the STAR aligner. <br>
+-Create a BAM index file for each sample.<br>
+-The RNA-seq data are from date palm fruit. In this experiment, researchers wished to test for differential gene expression between varieties of date palm with high fruit sucrose content (n=4) versus those with trace amounts of sucrose (n=4). The goal was to determine if a group of linked invertase enzymes identified by Genome Wide Association Study (GWAS) showed DGE between varieties with the two sugar phenotypes.<br>
