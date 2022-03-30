@@ -161,7 +161,66 @@ annotation_columns$sampleName <- NULL
 ```{r}
 pheatmap(norm_counts_top_30, color=colorRampPalette(c("white", "light pink", "purple"))(30), scale="row", cluster_cols = T, show_rownames = T,fontsize_row = 4, fontsize_col = 4,labels_row = rownames(dists),main='Differentially Expressed genes with hierarchical clustering',annotation_col =annotation_columns )
 ```
+The genes of interest in this experiment are three invertase genes that are located in a Quantitative Trait Locus (QTL) region approximately 1 Mb in size on chromosome 14 in the date palm genome. Invertase catalyzes the conversion of sucrose to fructose and glucose. We would like to know which (if any) of these genes are differentially expressed between sugar types and might control the sugar composition phenotype.<br>
+The gene identifiers of the candidates are:<br>
+Pdac_HC_chr14G0022900 (cell wall invertase enzyme)<br>
+Pdac_HC_chr14G0023100 (cell wall invertase enzyme)<br>
+Pdac_HC_chr14G0028200 (alkaline/neutral invertase enzyme)<br>
 ```{r}
-dists
+#Subset sroted deseq results to find expression of candidate genes
+sucrose_genes=resOrdered[ row.names(resOrdered) %in% c('Pdac_HC_chr14G0022900','Pdac_HC_chr14G0023100','Pdac_HC_chr14G0028200'), ]
+sucrose_genes
 ```
+
+### Q3.4a.
+Based on the condition, the condition is in the format contrast=("cond","B","A") where it outputs log2(B/A). In this case B=low sucrose and A=high sucrose. Genes Pdac_HC_chr14G0023100 and Pdac_HC_chr14G0022900 were higher in the low sucrose sample whereas Pdac_HC_chr14G0028200  was higher in the high sucrose sample. In decimal form, the corresponding values for these log2 fold changes are:
+```{r}
+decimal_value=exp(sucrose_genes$log2FoldChange)
+original_log_change=sucrose_genes$log2FoldChange
+log_to_dec_df=cbind(decimal_value,original_log_change)
+```
+```{r}
+log_to_dec_df
+```
+```{r}
+#normalized counts for each candidate gene as a table
+plot_ct=plotCounts(dds, gene='Pdac_HC_chr14G0028200', intgroup="condition", 
+                returnData=TRUE)
+```
+```{r}
+plot_ct
+```
+
+```{r}
+library(ggplot2)
+library(reshape)
+long_plot_ct <- melt(mydata, id=c("count","condition"))
+long_plot_ct
+```
+https://stackoverflow.com/questions/23246070/how-to-use-names-and-rownames-of-a-dataframe-for-the-aes-of-ggplot
+```{r}
+barpl<-ggplot(plot_ct, aes(x=rownames(plot_ct),y='count'))+
+  geom_bar(stat="identity")
+barpl
+```
+
+
+DESEq2 log2 fold-change estimates are frequently over-estimated particularly for low expression genes. To obtain better estimates of the log2 fold-change, DESeq2 recommends “shrinking” the raw fold-change estimates DESeq2 makes available the lfcShrink function to extract results from a DESeqDataSet object with shrunken log2 fold-change estimates.
+
+```{r}
+res.shrunk <- lfcShrink(dds=dds, contrast  = c('condition','lowSucrose','highSucrose'),res=res)
+```
+
+```{r}
+res.shrunkOrdered <- res.shrunk
+```
+
+```{r}
+resOrdered
+```
+```{r}
+res.shrunkOrdered
+```
+### Q3.5 Use the plotMA function to generate MA plots for the res and res.shrunk objects. 
+
 
