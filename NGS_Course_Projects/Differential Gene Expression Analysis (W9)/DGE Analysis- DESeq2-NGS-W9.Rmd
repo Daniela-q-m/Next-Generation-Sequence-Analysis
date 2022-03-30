@@ -28,6 +28,7 @@ dds <- DESeqDataSetFromHTSeqCount(
 ```{r}
 dds
 ```
+### 1.1
 dds is a DESeq dataset, 28595 rows by 8 cols.
 
 Test the null hypothesis that there is no effect of sugar type (i.e, \(B_1\) = 0) on gene expression for each gene in the genome annotation. In the DESeq2 framework, we are testing the null hypothesis of a fold-change of zero separately for each gene in the genome between high sucrose and low sucrose fruits.
@@ -56,10 +57,15 @@ rawcounts.matrix <- counts(dds,normalized=F)
 normalizedcounts.matrix <- counts(dds,normalized=T)
 class(rawcounts.matrix)
 ```
+```{r}
+head(normalizedcounts.matrix)
+```
 
 ```{r}
 dds
 ```
+
+###2.1
 As seen above, 28595 -20029=8566 genes were removed after filtering and normalization. 20029 genes were retained. 
 
 ##Analyze DGE data
@@ -71,15 +77,91 @@ rld <- rlog(dds)
 dists <- dist(t(assay(rld)))
 plot(hclust(dists))
 ```
+
+
+```{r}
+dists
+```
+
+
 Cluster samples using the plotPCA function (?plotPCA) and color the points by high or low sucrose content samples 
 
+```{r}
+plotPCA(rld)
+```
+###3.2a 
+Samples are mainly clustered by sucrose content. sample _66 is an external node from the low sucrose group. Otherwise, the samples seem to cluster according to sucrose content. Sample _53 is a high sucrose sample but it clusters with other low sugar samples but it is still closer in relationship to high sugar then the low sugar samples below it (_73,_06,_18). 
+On the PCA analysis, the samples cluster according to group. There is one sample from low sucrose group that is located away from low sucrose cluster and it is likely the same sample that was not clustered in the same clade in the dendogram.
+
+### 3.2b
+Yes. The PCA separates all points on the PC1 axis.
+Note: Although there is one outlier in the far right, when we draw a vertical line we can still cleanly separate high and low sucrose groups despite that one point being far away.
+
+### 3.2c
+Potential sources from batch effects:
+all of the above: sequencer, lane, day, reagents, technicians
+
+### 3.2d
+Without any further evidence/statistical analysis I cannot say that there are any batch effects because I do not have information on how the samples were run and without any further analysis, or dimensionality breakdown other than PCA is is hard to identfy batch effects. 
+
+```{r}
+#Results from the DESeq2 analysis can be extracted from the DESeqDataSet object using the results function.
+res <- results(dds, contrast = c('condition','lowSucrose','highSucrose') )
+class(res) 
+```
+```{r}
+#sort the data ascending on p-value. 
+#most significant differentially expressed gene at the top.
+resOrdered <- res[order(res$pvalue),] 
+head(resOrdered,10) # View the 10 most significant genes
+
+```
+DESeq2 identifies some of the genes displaying these problematic features by conducting “independent filtering”–an automated filtering process that causes p-values and/or adjusted p-values to be set to NA.
+
+### 3.3 
+Three quality control steps that are automatically conducted by DESeq to drop from consideration genes with suspect, or problematic, p-values 
+How many genes were impacted by the default independent filtering?
+-If all samples in a row have counts 0, then p value and adjusted p value will be set to NA.
+-If a row has an outlier count, then p vlaue and adjusted value is set to NA
+-If a row is filtered for low normalized count only adjusted p value is set to NA
+In independent filtering the mean of the normalized counts are used as the filter statistic.8566 genes were removed after filtering and normalization.
+
+
+The genes of interest in this experiment are three invertase genes that are located in a Quantitative Trait Locus (QTL) region approximately 1 Mb in size on chromosome 14 in the date palm genome.Invertase catalyzes the conversion of sucrose to fructose and glucose.
 
 
 
+```{r}
+library(pheatmap)
+```
+
+```{r}
+#Filter genes from normalized counts using the top 30 most expressed genes
+norm_counts_top_30=normalizedcounts.matrix[rownames(head(resOrdered,30)), ]
+```
 
 
+```{r}
+annotation_columns=sampleTable
+annotation_columns$fileName <- NULL
+```
+```{r}
+annotation_columns
+```
+```{r}
+row.names(annotation_columns) <- colnames(norm_counts_top_30)
+```
+```{r}
+annotation_columns
+```
+```{r}
+annotation_columns$sampleName <- NULL
+```
 
-
-
-
+```{r}
+pheatmap(norm_counts_top_30, color=colorRampPalette(c("white", "light pink", "purple"))(30), scale="row", cluster_cols = T, show_rownames = T,fontsize_row = 4, fontsize_col = 4,labels_row = rownames(dists),main='Differentially Expressed genes with hierarchical clustering',annotation_col =annotation_columns )
+```
+```{r}
+dists
+```
 
