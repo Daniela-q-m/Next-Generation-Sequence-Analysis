@@ -51,3 +51,6 @@ This folder contains the projects completed in the course 'Next Generation Seque
 ### Differential Gene Expression Analysis (W9)
 -Conduct a test of differential gene expression (DGE) between samples from the four date palm varieties with high sucrose content versus the four with low sucrose content described in Week 8.
 -The RNA-seq data in this experiment were generated on a NextSeq sequencer, processed to exclude reads that failed Illumina’s quality control filter, and then adapters removed with Trimmomatic. Reads were aligned with STAR. A read count matrix was created from each sample BAM 
+
+### Pseudo-alignment and Differential Gene Expression Analysis (W10)
+-“pseudo-alignment” based method to conduct differential gene expression (DGE) analysis with the Salmon + tximport + DESeq2 workflow.
