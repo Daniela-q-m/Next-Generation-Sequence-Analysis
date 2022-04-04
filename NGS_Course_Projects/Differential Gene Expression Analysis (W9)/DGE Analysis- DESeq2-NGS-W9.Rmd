@@ -7,6 +7,9 @@ The count matrices for this analysis were downloaded from the NYU HPC and saved 
 ```{r}
 library(DESeq2)
 ```
+```{r}
+ install.packages("reshape2")
+```
 
 #Create a DESeqDataSet object
 ```{r}
@@ -193,22 +196,25 @@ plot_ct
 
 ```{r}
 library(ggplot2)
-library(reshape)
-long_plot_ct <- melt(mydata, id=c("count","condition"))
-long_plot_ct
+library(reshape2)
+
 ```
 https://stackoverflow.com/questions/23246070/how-to-use-names-and-rownames-of-a-dataframe-for-the-aes-of-ggplot
 ```{r}
-barpl<-ggplot(plot_ct, aes(x=rownames(plot_ct),y='count'))+
-  geom_bar(stat="identity")
-barpl
+plot_ct
+```
+```{r}
+plot_ct[ "sample" ] <- rownames(plot_ct)
+ggplot(plot_ct, aes(x=sample, y=count,fill=condition)) + 
+  geom_bar(stat = "identity")+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+  xlab("Sample") + ylab("normalized counts")+ ggtitle("Counts for Candidate Invertase Genes") 
 ```
 
 
 DESEq2 log2 fold-change estimates are frequently over-estimated particularly for low expression genes. To obtain better estimates of the log2 fold-change, DESeq2 recommends “shrinking” the raw fold-change estimates DESeq2 makes available the lfcShrink function to extract results from a DESeqDataSet object with shrunken log2 fold-change estimates.
 
 ```{r}
-res.shrunk <- lfcShrink(dds=dds, contrast  = c('condition','lowSucrose','highSucrose'),res=res)
+res.shrunk <- lfcShrink(dds, contrast = c('condition','lowSucrose','highSucrose'),type='normal' )
 ```
 
 ```{r}
@@ -223,4 +229,17 @@ res.shrunkOrdered
 ```
 ### Q3.5 Use the plotMA function to generate MA plots for the res and res.shrunk objects. 
 
+#Multiple Testing
+Internally, DESeq2 will perform the False Discovery Rate (FDR) correction by running the p.adjust R core function (?p.adjust) on the raw p-values (pvalue column) using the Benjamin-Hochberg (“BH”) method. The output is reported in the “padj” column and is the adjusted p-value (i.e., the FDR). 
+
+### Q4.1 
+```{r}
+#Subset the table with “shrunken” log2 fold-change estimates 
+```
+### Q4.1a. Report your results from the lfcShrink output table for the candidate genes.
+
+###Q4.1b Using a criterion that a statistically differentially expressed gene must also show at least a two-fold change in expression (on linear scale) to be biologically meaningful, which genes do you consider to be differentially expressed? Please specify the gene(s), the FDR threshold you applied.
+
+
+### Q4.1c Which of the candidate genes do you think could be responsible for the sugar composition trait on the chromosome 14 sugar QTL?
 
