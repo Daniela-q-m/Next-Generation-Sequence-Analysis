@@ -1,0 +1,13 @@
+---
+title: "tximport,DESeq2 Analysis Sucrose Date Palm Samples"
+output: html_notebook
+---
+
+
+
+```{r}
+plot(cars)
+```
+
+
+
