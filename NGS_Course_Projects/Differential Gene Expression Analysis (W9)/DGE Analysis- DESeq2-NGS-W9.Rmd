@@ -3,7 +3,7 @@ title: "W9 Differential Gene Expression Analysis w DESeq2"
 output: html_notebook
 ---
 
-The count matrices for this analysis were downloaded from the NYU HPC and saved in a local folder titled source_files in this same working directory. 
+ 
 ```{r}
 library(DESeq2)
 ```
@@ -14,7 +14,7 @@ library(dplyr)
 ```{r}
  install.packages("reshape2")
 ```
-
+The count matrices for this analysis were downloaded from the NYU HPC and saved in a local folder titled source_files in this same working directory. 
 #Create a DESeqDataSet object
 ```{r}
 sampleFiles <- paste(c('PDAC253','PDAC282','PDAC286','PDAC316','PDAC266','PDAC273','PDAC306','PDAC318'),'.htseq_count.txt',sep="")
@@ -38,7 +38,7 @@ dds
 ### 1.1
 dds is a DESeq dataset, 28595 rows by 8 cols.
 
-Test the null hypothesis that there is no effect of sugar type (i.e, \(B_1\) = 0) on gene expression for each gene in the genome annotation. In the DESeq2 framework, we are testing the null hypothesis of a fold-change of zero separately for each gene in the genome between high sucrose and low sucrose fruits.
+Test the null hypothesis that there is no effect of sugar type  on gene expression for each gene in the genome annotation. In the DESeq2 framework, we are testing the null hypothesis of a fold-change of zero separately for each gene in the genome between high sucrose and low sucrose fruits.
 
 ```{r}
 class(dds)
@@ -67,7 +67,7 @@ class(rawcounts.matrix)
 ```{r}
 head(normalizedcounts.matrix)
 ```
-
+### Q1.1
 ```{r}
 dds
 ```
@@ -87,6 +87,7 @@ plot(hclust(dists))
 
 
 ```{r}
+#Distance Matrix
 dists
 ```
 
@@ -94,6 +95,7 @@ dists
 Cluster samples using the plotPCA function (?plotPCA) and color the points by high or low sucrose content samples 
 
 ```{r}
+#Make PCA plot
 plotPCA(rld)
 ```
 ###3.2a 
@@ -102,14 +104,14 @@ On the PCA analysis, the samples cluster according to group. There is one sample
 
 ### 3.2b
 Yes. The PCA separates all points on the PC1 axis.
-Note: Although there is one outlier in the far right, when we draw a vertical line we can still cleanly separate high and low sucrose groups despite that one point being far away.
+Note: Although there is one outlier in the far right, when we draw a vertical line we can still cleanly separate high and low sucrose groups despite that one point being vertically far away.
 
 ### 3.2c
 Potential sources from batch effects:
 all of the above: sequencer, lane, day, reagents, technicians
 
 ### 3.2d
-Without any further evidence/statistical analysis I cannot say that there are any batch effects because I do not have information on how the samples were run and without any further analysis, or dimensionality breakdown other than PCA is is hard to identfy batch effects. 
+Without any further evidence/statistical analysis I cannot say that there are any batch effects because I do not have information on how the samples were run and without any further analysis, or dimensionality breakdown other than PCA is is hard to identify batch effects. 
 
 ```{r}
 #Results from the DESeq2 analysis can be extracted from the DESeqDataSet object using the results function.
@@ -149,6 +151,7 @@ norm_counts_top_30=normalizedcounts.matrix[rownames(head(resOrdered,30)), ]
 
 
 ```{r}
+#Here I arrange the annotation columns to generate an annotated and clsutered heatmap using pheatmap
 annotation_columns=sampleTable
 annotation_columns$fileName <- NULL
 ```
@@ -193,72 +196,104 @@ original_log_change=sucrose_genes$log2FoldChange
 log_to_dec_df=cbind(decimal_value,original_log_change)
 ```
 ```{r}
+#Log to decimal value log fold change converting table. 
 log_to_dec_df
 ```
+
 ### Q3.4B. report the normalized counts for each candidate gene as a table
-```{r}
-candidate1<-plotCounts(dds, gene='Pdac_HC_chr14G0022900', intgroup="condition", 
-                returnData=TRUE)
-#candidate2<-plotCounts(dds, gene='Pdac_HC_chr14G0023100 ', intgroup="condition", 
-                #returnData=TRUE)
-#candidate3<-plotCounts(dds, gene='Pdac_HC_chr14G0022900', intgroup="condition", 
-                #returnData=TRUE)
-```
-```{r}
-candidate2<-plotCounts(dds, gene='Pdac_HC_chr14G0023100 ', intgroup="condition", 
-                returnData=TRUE)
-```
-
-```{r}
-#Subset dds dataframe and fileter out candidate genes
-subset_dds<-counts(dds[dds$candidate_genes])
-```
-```{r}
-subset_dds
-```
-```{r}
-plotCounts(filtered_dds, gene=rownames(filtered_dds), intgroup="condition", 
-                returnData=TRUE)
-```
-
-```{r}
-filtered_dds <- counts(dds[candidate_genes, ])
-```
-```{r}
-filtered_dds
-```
 
 ```{r}
 #normalized counts for each candidate gene as a table
-plot_ct<-plotCounts(filtered_dds, gene=candidate_genes, intgroup="condition", 
-                returnData=TRUE)
+plot_ct1<-plotCounts(dds, gene='Pdac_HC_chr14G0028200', intgroup="condition", returnData=TRUE)
+```
+```{r}
+plot_ct2<-plotCounts(dds, gene='Pdac_HC_chr14G0023100', intgroup="condition", returnData=TRUE)
+```
+```{r}
+plot_ct3<-plotCounts(dds, gene='Pdac_HC_chr14G0022900', intgroup="condition", returnData=TRUE)
+```
+```{r}
+plot_ct1['gene name']<-rep(c('Pdac_HC_chr14G0028200'),each=8)
+```
+```{r}
+plot_ct1['sample name']<-rownames(plot_ct1)
+rownames(plot_ct1)<-NULL #Remove row names
+```
+
+
+```{r}
+plot_ct2['gene name']<-rep(c('Pdac_HC_chr14G0023100'),each=8)
+```
+```{r}
+plot_ct2['sample name']<-rownames(plot_ct2)
+rownames(plot_ct2)<-NULL #Remove row names
 ```
 
 ```{r}
-dds %>% filter(rownames(dds) %in% genes_list) %>%
-  group_by(rownames(dds),diagnosis) %>%
-  summarize(mean_FPKM = mean(FPKM), median_FPKM = median(FPKM)) %>%
-  arrange(-mean_FPKM)
+plot_ct3['gene name']<-rep(c('Pdac_HC_chr14G0022900'),each=8)
+```
+```{r}
+plot_ct3['sample name']<-rownames(plot_ct3)
+rownames(plot_ct3)<-NULL #Remove row names
+
+```
+```{r}
+#Label the first column of each indidivual dataframe with the candidate gene name
+names(plot_ct3)[1]='Pdac_HC_chr14G0022900'
+names(plot_ct2)[1]='Pdac_HC_chr14G0023100'
+names(plot_ct1)[1]='Pdac_HC_chr14G0028200'
+```
+```{r}
+plot_ct1 #Sample dataframe
+```
+```{r}
+plot_ct2
+```
+```{r}
+plot_ct3
 ```
 
 ```{r}
-plot_ct
+#Make new dataframe by choosing columns from dataframes above
+counts_candidates<-as.data.frame(cbind(plot_ct1['sample name'],plot_ct1['Pdac_HC_chr14G0028200'],plot_ct2['Pdac_HC_chr14G0023100'],plot_ct3['Pdac_HC_chr14G0022900'], plot_ct1['condition']))
 ```
+```{r}
+counts_candidates #This dataframe reflects the counts for all samples and all candidate genes
+```
+```{r}
+library(tidyr)
+library(reshape2)
+```
+
+```{r}
+long <- melt(counts_candidates, id.vars = c("sample name", "condition"))
+#Make dataframe into long format for graphing
+```
+```{r}
+long
+```
+
+```{r}
+names(long)[1]<-'sample' #Change column name to avoid spaces
+```
+
+```{r}
+#Make a grouped bar plot with ggplot2 to show count data for candidate genes
+ggplot(long, aes(x=variable, y=value, fill=sample)) + 
+  geom_bar(stat="identity", position=position_dodge())+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+  ylab("Normalized Counts")+ xlab("Gene Candidate")+ggtitle("Counts for Candidate Invertase Genes") 
+```
+```{r}
+#Make a grouped bar plot with ggplot2 to show count data for candidate genes
+ggplot(long, aes(x=variable, y=value, fill=condition)) + 
+  geom_bar(stat="identity", position=position_dodge())+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+  ylab("Normalized Counts")+ xlab("Gene Candidate")+ggtitle("Counts for Candidate Invertase Genes") 
+```
+
 
 ```{r}
 library(ggplot2)
 library(reshape2)
-
-```
-https://stackoverflow.com/questions/23246070/how-to-use-names-and-rownames-of-a-dataframe-for-the-aes-of-ggplot
-```{r}
-plot_ct
-```
-```{r}
-plot_ct[ "sample" ] <- rownames(plot_ct)
-ggplot(plot_ct, aes(x=sample, y=count,fill=condition)) + 
-  geom_bar(stat = "identity")+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
-  xlab("Sample") + ylab("normalized counts")+ ggtitle("Counts for Candidate Invertase Genes") 
 ```
 
 
@@ -295,14 +330,19 @@ plotMA(res.shrunk , ylim=c(-4,4))
 Internally, DESeq2 will perform the False Discovery Rate (FDR) correction by running the p.adjust R core function (?p.adjust) on the raw p-values (pvalue column) using the Benjamin-Hochberg (“BH”) method. The output is reported in the “padj” column and is the adjusted p-value (i.e., the FDR). 
 
 ### Q4.1 Subset the table with “shrunken” log2 fold-change estimates to include only the candidate genes
+### Q4.1a. Report results from the lfcShrink output table for the candidate genes.
 ```{r}
 subset_res_shrunk<-res.shrunk[candidate_genes,]
 subset_res_shrunk
 ```
-### Q4.1a. Report your results from the lfcShrink output table for the candidate genes.
 
 ###Q4.1b Using a criterion that a statistically differentially expressed gene must also show at least a two-fold change in expression (on linear scale) to be biologically meaningful, which genes do you consider to be differentially expressed? Please specify the gene(s), the FDR threshold you applied.
+With FDR 0.001, the six  genes below can be consider differentially expressed since the amgnitude of the log fold change is greater than 2 and p value is less than 0.001.
+```{r}
+logfold_filter<-as.data.frame(subset(res.shrunk, res.shrunk[,2] > 2 |  res.shrunk[,2] < -2))
+head(logfold_filter)
+```
 
 
 ### Q4.1c Which of the candidate genes do you think could be responsible for the sugar composition trait on the chromosome 14 sugar QTL?
-
+Based on log fold change, Pdac_HC_chr14G0022900 seems to be the best candidate based on the filtered table above. As seen on the bar plot above, it has the biggest ratio expression between low and high sucrose content. This means low sucrose palms express this gene lot whereas high sucrose palms express it minimally. 
