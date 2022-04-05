@@ -1,6 +1,8 @@
 ---
 title: "W9 Differential Gene Expression Analysis w DESeq2"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 
  
@@ -320,10 +322,12 @@ res.shrunkOrdered
 ### Q3.5 Use the plotMA function to generate MA plots for the res and res.shrunk objects. 
 It is appropriate to report the shrunken estimates because genes with low expression can have high variability that can be reduced by shrinkage. 
 ```{r}
-plotMA(res, ylim=c(-4,4))
+MA1<-plotMA(res, ylim=c(-4,4))
+MA1
 ```
 ```{r}
-plotMA(res.shrunk , ylim=c(-4,4))
+MA2<-plotMA(res.shrunk , ylim=c(-4,4))
+MA2 
 ```
 
 #Multiple Testing
