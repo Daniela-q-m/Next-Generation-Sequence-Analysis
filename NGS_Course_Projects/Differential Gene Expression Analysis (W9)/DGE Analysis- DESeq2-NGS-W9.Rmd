@@ -8,6 +8,10 @@ The count matrices for this analysis were downloaded from the NYU HPC and saved 
 library(DESeq2)
 ```
 ```{r}
+library(dplyr)
+```
+
+```{r}
  install.packages("reshape2")
 ```
 
@@ -177,6 +181,12 @@ sucrose_genes
 
 ### Q3.4a.
 Based on the condition, the condition is in the format contrast=("cond","B","A") where it outputs log2(B/A). In this case B=low sucrose and A=high sucrose. Genes Pdac_HC_chr14G0023100 and Pdac_HC_chr14G0022900 were higher in the low sucrose sample whereas Pdac_HC_chr14G0028200  was higher in the high sucrose sample. In decimal form, the corresponding values for these log2 fold changes are:
+
+```{r}
+#Make a list of the candidate gene names:
+candidate_genes<-c('Pdac_HC_chr14G0022900','Pdac_HC_chr14G0023100','Pdac_HC_chr14G0028200')
+```
+
 ```{r}
 decimal_value=exp(sucrose_genes$log2FoldChange)
 original_log_change=sucrose_genes$log2FoldChange
@@ -185,11 +195,52 @@ log_to_dec_df=cbind(decimal_value,original_log_change)
 ```{r}
 log_to_dec_df
 ```
+### Q3.4B. report the normalized counts for each candidate gene as a table
 ```{r}
-#normalized counts for each candidate gene as a table
-plot_ct=plotCounts(dds, gene='Pdac_HC_chr14G0028200', intgroup="condition", 
+candidate1<-plotCounts(dds, gene='Pdac_HC_chr14G0022900', intgroup="condition", 
+                returnData=TRUE)
+#candidate2<-plotCounts(dds, gene='Pdac_HC_chr14G0023100 ', intgroup="condition", 
+                #returnData=TRUE)
+#candidate3<-plotCounts(dds, gene='Pdac_HC_chr14G0022900', intgroup="condition", 
+                #returnData=TRUE)
+```
+```{r}
+candidate2<-plotCounts(dds, gene='Pdac_HC_chr14G0023100 ', intgroup="condition", 
                 returnData=TRUE)
 ```
+
+```{r}
+#Subset dds dataframe and fileter out candidate genes
+subset_dds<-counts(dds[dds$candidate_genes])
+```
+```{r}
+subset_dds
+```
+```{r}
+plotCounts(filtered_dds, gene=rownames(filtered_dds), intgroup="condition", 
+                returnData=TRUE)
+```
+
+```{r}
+filtered_dds <- counts(dds[candidate_genes, ])
+```
+```{r}
+filtered_dds
+```
+
+```{r}
+#normalized counts for each candidate gene as a table
+plot_ct<-plotCounts(filtered_dds, gene=candidate_genes, intgroup="condition", 
+                returnData=TRUE)
+```
+
+```{r}
+dds %>% filter(rownames(dds) %in% genes_list) %>%
+  group_by(rownames(dds),diagnosis) %>%
+  summarize(mean_FPKM = mean(FPKM), median_FPKM = median(FPKM)) %>%
+  arrange(-mean_FPKM)
+```
+
 ```{r}
 plot_ct
 ```
@@ -212,13 +263,17 @@ ggplot(plot_ct, aes(x=sample, y=count,fill=condition)) +
 
 
 DESEq2 log2 fold-change estimates are frequently over-estimated particularly for low expression genes. To obtain better estimates of the log2 fold-change, DESeq2 recommends “shrinking” the raw fold-change estimates DESeq2 makes available the lfcShrink function to extract results from a DESeqDataSet object with shrunken log2 fold-change estimates.
-
 ```{r}
-res.shrunk <- lfcShrink(dds, contrast = c('condition','lowSucrose','highSucrose'),type='normal' )
+library(devtools)
+install_github("stephens999/ashr")
 ```
 
 ```{r}
-res.shrunkOrdered <- res.shrunk
+res.shrunk <- lfcShrink(dds, contrast = c('condition','lowSucrose','highSucrose'),type='ashr' )
+```
+
+```{r}
+res.shrunkOrdered <- res.shrunk[order(res.shrunk$pvalue),]
 ```
 
 ```{r}
@@ -228,13 +283,21 @@ resOrdered
 res.shrunkOrdered
 ```
 ### Q3.5 Use the plotMA function to generate MA plots for the res and res.shrunk objects. 
+It is appropriate to report the shrunken estimates because genes with low expression can have high variability that can be reduced by shrinkage. 
+```{r}
+plotMA(res, ylim=c(-4,4))
+```
+```{r}
+plotMA(res.shrunk , ylim=c(-4,4))
+```
 
 #Multiple Testing
 Internally, DESeq2 will perform the False Discovery Rate (FDR) correction by running the p.adjust R core function (?p.adjust) on the raw p-values (pvalue column) using the Benjamin-Hochberg (“BH”) method. The output is reported in the “padj” column and is the adjusted p-value (i.e., the FDR). 
 
-### Q4.1 
+### Q4.1 Subset the table with “shrunken” log2 fold-change estimates to include only the candidate genes
 ```{r}
-#Subset the table with “shrunken” log2 fold-change estimates 
+subset_res_shrunk<-res.shrunk[candidate_genes,]
+subset_res_shrunk
 ```
 ### Q4.1a. Report your results from the lfcShrink output table for the candidate genes.
 

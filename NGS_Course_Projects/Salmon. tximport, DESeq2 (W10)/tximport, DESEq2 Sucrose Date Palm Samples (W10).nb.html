@@ -221,14 +221,175 @@ pre code {
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGxvdChjYXJzKVxuYGBgIn0= -->
-<pre class="r"><code>plot(cars)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaWYgKCFyZXF1aXJlKFwiQmlvY01hbmFnZXJcIiwgcXVpZXRseSA9IFRSVUUpKVxuICAgIGluc3RhbGwucGFja2FnZXMoXCJCaW9jTWFuYWdlclwiKVxuYGBgIn0= -->
+<pre class="r"><code>if (!require(&quot;BiocManager&quot;, quietly = TRUE))
+    install.packages(&quot;BiocManager&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiQmlvY29uZHVjdG9yIHZlcnNpb24gMy4xNCAoQmlvY01hbmFnZXIgMS4zMC4xNiksIFIgNC4xLjIgKDIwMjEtMTEtMDEpXG4ifQ== -->
+<pre><code>Bioconductor version 3.14 (BiocManager 1.30.16), R 4.1.2 (2021-11-01)</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuQmlvY01hbmFnZXI6Omluc3RhbGwoXCJ0eGltcG9ydFwiKVxuYGBgIn0= -->
+<pre class="r"><code>BiocManager::install(&quot;tximport&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiJ2dldE9wdGlvbihcInJlcG9zXCIpJyByZXBsYWNlcyBCaW9jb25kdWN0b3Igc3RhbmRhcmQgcmVwb3NpdG9yaWVzLCBzZWUgJz9yZXBvc2l0b3JpZXMnIGZvclxuZGV0YWlsc1xuXG5yZXBsYWNlbWVudCByZXBvc2l0b3JpZXM6XG4gICAgQ1JBTjogaHR0cHM6Ly9jcmFuLnJzdHVkaW8uY29tL1xuXG5CaW9jb25kdWN0b3IgdmVyc2lvbiAzLjE0IChCaW9jTWFuYWdlciAxLjMwLjE2KSwgUiA0LjEuMiAoMjAyMS0xMS0wMSlcbkluc3RhbGxpbmcgcGFja2FnZShzKSAndHhpbXBvcnQnXG50cnlpbmcgVVJMICdodHRwczovL2Jpb2NvbmR1Y3Rvci5vcmcvcGFja2FnZXMvMy4xNC9iaW9jL2Jpbi9tYWNvc3gvY29udHJpYi80LjEvdHhpbXBvcnRfMS4yMi4wLnRneidcbkNvbnRlbnQgdHlwZSAnYXBwbGljYXRpb24veC1nemlwJyBsZW5ndGggMzQyMjUzIGJ5dGVzICgzMzQgS0IpXG49PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PVxuZG93bmxvYWRlZCAzMzQgS0JcbiJ9 -->
+<pre><code>&#39;getOption(&quot;repos&quot;)&#39; replaces Bioconductor standard repositories, see &#39;?repositories&#39; for
+details
+
+replacement repositories:
+    CRAN: https://cran.rstudio.com/
+
+Bioconductor version 3.14 (BiocManager 1.30.16), R 4.1.2 (2021-11-01)
+Installing package(s) &#39;tximport&#39;
+trying URL &#39;https://bioconductor.org/packages/3.14/bioc/bin/macosx/contrib/4.1/tximport_1.22.0.tgz&#39;
+Content type &#39;application/x-gzip&#39; length 342253 bytes (334 KB)
+==================================================
+downloaded 334 KB</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5UaGUgZG93bmxvYWRlZCBiaW5hcnkgcGFja2FnZXMgYXJlIGluXG5cdC92YXIvZm9sZGVycy9rei82NzFueXRqeDZ3YmI2cXZ2ZnB2N2p3dDAwMDAwZ24vVC8vUnRtcGRqQjZuQy9kb3dubG9hZGVkX3BhY2thZ2VzXG4ifQ== -->
+<pre><code>
+The downloaded binary packages are in
+    /var/folders/kz/671nytjx6wbb6qvvfpv7jwt00000gn/T//RtmpdjB6nC/downloaded_packages</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiT2xkIHBhY2thZ2VzOiAnYXBsb3QnLCAnY2x1c3RlcicsICdmb3JtYXRSJywgJ2dlcnQnLCAnZ2dmdW4nLCAnaWdyYXBoJywgJ21nY3YnLFxuICAnUkNvbG9yQnJld2VyJywgJ3Jwcm9qcm9vdCcsICdSU1FMaXRlJ1xuIn0= -->
+<pre><code>Old packages: &#39;aplot&#39;, &#39;cluster&#39;, &#39;formatR&#39;, &#39;gert&#39;, &#39;ggfun&#39;, &#39;igraph&#39;, &#39;mgcv&#39;,
+  &#39;RColorBrewer&#39;, &#39;rprojroot&#39;, &#39;RSQLite&#39;</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiVXBkYXRlIGFsbC9zb21lL25vbmU/IFthL3Mvbl06IFxuIn0= -->
+<pre><code>Update all/some/none? [a/s/n]: </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYVxuYGBgIn0= -->
+<pre class="r"><code>a</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG4gIFRoZXJlIGlzIGEgYmluYXJ5IHZlcnNpb24gYXZhaWxhYmxlIGJ1dCB0aGUgc291cmNlIHZlcnNpb24gaXMgbGF0ZXI6XG4ifQ== -->
+<pre><code>
+  There is a binary version available but the source version is later:</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6MSwibmNvbCI6Mywic3VtbWFyeSI6W119LCJyZGYiOiJINHNJQUFBQUFBQUFBMjFRMjA0RElSUThlMEZUNGpWK3g1S3NmZkZaalIvUWFOSTNRMWxhaVJRMndLYjY4MVZBU0ZaU0VzS1o0Y3ljeStwNXZjUnJEQUFOdEZVTkRmSWhvTGZYbCs0Qm9LMDlxS0NGUlhpL2ZOSmR6QVM0bVgyZ252VGQvU2x5NlFNY3lYaisyU0ZGOTl3bVZaUElzNDFRMUh4blpQVmtHRS9vVm5FKzJIZW05Nk9RMUFtdENzZUYwUWN5ZDgwZkY2c25MYlY1TlB6QVRka0drOVNXQWp4UVI4bldlQytQam9Ya1hJK2h1aGZWWVIyb0VGZW1JSzRuRmJvYU92WXhxYyt1bnkwbDNNc1RjZk5Yc3Y1SlZpaHZoS3VkVUhralNOSU5sd2xjK2VuajhHUTBRcms4aVdjdGNkclJuSWVabHBtSnM4SHhGL25DMUFvRkFnQUEifQ== -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["binary"],"name":[1],"type":["chr"],"align":["left"]},{"label":["source"],"name":[2],"type":["chr"],"align":["left"]},{"label":["needs_compilation"],"name":[3],"type":["lgl"],"align":["right"]}],"data":[{"1":"1.1-2","2":"1.1-3","3":"FALSE","_rn_":"RColorBrewer"}],"options":{"columns":{"min":{},"max":[10],"total":[3]},"rows":{"min":[10],"max":[10],"total":[1]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-output-begin eyJkYXRhIjoidHJ5aW5nIFVSTCAnaHR0cHM6Ly9jcmFuLnJzdHVkaW8uY29tL2Jpbi9tYWNvc3gvY29udHJpYi80LjEvYXBsb3RfMC4xLjMudGd6J1xuQ29udGVudCB0eXBlICdhcHBsaWNhdGlvbi94LWd6aXAnIGxlbmd0aCA1MDkwOCBieXRlcyAoNDkgS0IpXG49PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PVxuZG93bmxvYWRlZCA0OSBLQlxuXG50cnlpbmcgVVJMICdodHRwczovL2NyYW4ucnN0dWRpby5jb20vYmluL21hY29zeC9jb250cmliLzQuMS9jbHVzdGVyXzIuMS4zLnRneidcbkNvbnRlbnQgdHlwZSAnYXBwbGljYXRpb24veC1nemlwJyBsZW5ndGggNjA3NTMxIGJ5dGVzICg1OTMgS0IpXG49PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PVxuZG93bmxvYWRlZCA1OTMgS0JcblxudHJ5aW5nIFVSTCAnaHR0cHM6Ly9jcmFuLnJzdHVkaW8uY29tL2Jpbi9tYWNvc3gvY29udHJpYi80LjEvZm9ybWF0Ul8xLjEyLnRneidcbkNvbnRlbnQgdHlwZSAnYXBwbGljYXRpb24veC1nemlwJyBsZW5ndGggMTQ5MDI1IGJ5dGVzICgxNDUgS0IpXG49PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PVxuZG93bmxvYWRlZCAxNDUgS0JcblxudHJ5aW5nIFVSTCAnaHR0cHM6Ly9jcmFuLnJzdHVkaW8uY29tL2Jpbi9tYWNvc3gvY29udHJpYi80LjEvZ2VydF8xLjYuMC50Z3onXG5Db250ZW50IHR5cGUgJ2FwcGxpY2F0aW9uL3gtZ3ppcCcgbGVuZ3RoIDIxMzYxNjQgYnl0ZXMgKDIuMCBNQilcbj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09XG5kb3dubG9hZGVkIDIuMCBNQlxuXG50cnlpbmcgVVJMICdodHRwczovL2NyYW4ucnN0dWRpby5jb20vYmluL21hY29zeC9jb250cmliLzQuMS9nZ2Z1bl8wLjAuNi50Z3onXG5Db250ZW50IHR5cGUgJ2FwcGxpY2F0aW9uL3gtZ3ppcCcgbGVuZ3RoIDE4ODEyMSBieXRlcyAoMTgzIEtCKVxuPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT1cbmRvd25sb2FkZWQgMTgzIEtCXG5cbnRyeWluZyBVUkwgJ2h0dHBzOi8vY3Jhbi5yc3R1ZGlvLmNvbS9iaW4vbWFjb3N4L2NvbnRyaWIvNC4xL2lncmFwaF8xLjMuMC50Z3onXG5Db250ZW50IHR5cGUgJ2FwcGxpY2F0aW9uL3gtZ3ppcCcgbGVuZ3RoIDc1MTk1NTggYnl0ZXMgKDcuMiBNQilcbj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09XG5kb3dubG9hZGVkIDcuMiBNQlxuXG50cnlpbmcgVVJMICdodHRwczovL2NyYW4ucnN0dWRpby5jb20vYmluL21hY29zeC9jb250cmliLzQuMS9tZ2N2XzEuOC00MC50Z3onXG5Db250ZW50IHR5cGUgJ2FwcGxpY2F0aW9uL3gtZ3ppcCcgbGVuZ3RoIDM1MTY2NzIgYnl0ZXMgKDMuNCBNQilcbj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09XG5kb3dubG9hZGVkIDMuNCBNQlxuXG50cnlpbmcgVVJMICdodHRwczovL2NyYW4ucnN0dWRpby5jb20vYmluL21hY29zeC9jb250cmliLzQuMS9ycHJvanJvb3RfMi4wLjMudGd6J1xuQ29udGVudCB0eXBlICdhcHBsaWNhdGlvbi94LWd6aXAnIGxlbmd0aCA5OTY2OCBieXRlcyAoOTcgS0IpXG49PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PVxuZG93bmxvYWRlZCA5NyBLQlxuXG50cnlpbmcgVVJMICdodHRwczovL2NyYW4ucnN0dWRpby5jb20vYmluL21hY29zeC9jb250cmliLzQuMS9SU1FMaXRlXzIuMi4xMi50Z3onXG5Db250ZW50IHR5cGUgJ2FwcGxpY2F0aW9uL3gtZ3ppcCcgbGVuZ3RoIDQ0ODQxOTEgYnl0ZXMgKDQuMyBNQilcbj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09XG5kb3dubG9hZGVkIDQuMyBNQlxuIn0= -->
+<pre><code>trying URL &#39;https://cran.rstudio.com/bin/macosx/contrib/4.1/aplot_0.1.3.tgz&#39;
+Content type &#39;application/x-gzip&#39; length 50908 bytes (49 KB)
+==================================================
+downloaded 49 KB
+
+trying URL &#39;https://cran.rstudio.com/bin/macosx/contrib/4.1/cluster_2.1.3.tgz&#39;
+Content type &#39;application/x-gzip&#39; length 607531 bytes (593 KB)
+==================================================
+downloaded 593 KB
+
+trying URL &#39;https://cran.rstudio.com/bin/macosx/contrib/4.1/formatR_1.12.tgz&#39;
+Content type &#39;application/x-gzip&#39; length 149025 bytes (145 KB)
+==================================================
+downloaded 145 KB
+
+trying URL &#39;https://cran.rstudio.com/bin/macosx/contrib/4.1/gert_1.6.0.tgz&#39;
+Content type &#39;application/x-gzip&#39; length 2136164 bytes (2.0 MB)
+==================================================
+downloaded 2.0 MB
+
+trying URL &#39;https://cran.rstudio.com/bin/macosx/contrib/4.1/ggfun_0.0.6.tgz&#39;
+Content type &#39;application/x-gzip&#39; length 188121 bytes (183 KB)
+==================================================
+downloaded 183 KB
+
+trying URL &#39;https://cran.rstudio.com/bin/macosx/contrib/4.1/igraph_1.3.0.tgz&#39;
+Content type &#39;application/x-gzip&#39; length 7519558 bytes (7.2 MB)
+==================================================
+downloaded 7.2 MB
+
+trying URL &#39;https://cran.rstudio.com/bin/macosx/contrib/4.1/mgcv_1.8-40.tgz&#39;
+Content type &#39;application/x-gzip&#39; length 3516672 bytes (3.4 MB)
+==================================================
+downloaded 3.4 MB
+
+trying URL &#39;https://cran.rstudio.com/bin/macosx/contrib/4.1/rprojroot_2.0.3.tgz&#39;
+Content type &#39;application/x-gzip&#39; length 99668 bytes (97 KB)
+==================================================
+downloaded 97 KB
+
+trying URL &#39;https://cran.rstudio.com/bin/macosx/contrib/4.1/RSQLite_2.2.12.tgz&#39;
+Content type &#39;application/x-gzip&#39; length 4484191 bytes (4.3 MB)
+==================================================
+downloaded 4.3 MB</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5UaGUgZG93bmxvYWRlZCBiaW5hcnkgcGFja2FnZXMgYXJlIGluXG5cdC92YXIvZm9sZGVycy9rei82NzFueXRqeDZ3YmI2cXZ2ZnB2N2p3dDAwMDAwZ24vVC8vUnRtcGRqQjZuQy9kb3dubG9hZGVkX3BhY2thZ2VzXG4ifQ== -->
+<pre><code>
+The downloaded binary packages are in
+    /var/folders/kz/671nytjx6wbb6qvvfpv7jwt00000gn/T//RtmpdjB6nC/downloaded_packages</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiaW5zdGFsbGluZyB0aGUgc291cmNlIHBhY2thZ2Ug4oCYUkNvbG9yQnJld2Vy4oCZXG5cbnRyeWluZyBVUkwgJ2h0dHBzOi8vY3Jhbi5yc3R1ZGlvLmNvbS9zcmMvY29udHJpYi9SQ29sb3JCcmV3ZXJfMS4xLTMudGFyLmd6J1xuQ29udGVudCB0eXBlICdhcHBsaWNhdGlvbi94LWd6aXAnIGxlbmd0aCAxMTYzOCBieXRlcyAoMTEgS0IpXG49PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PVxuZG93bmxvYWRlZCAxMSBLQlxuXG4qIGluc3RhbGxpbmcgKnNvdXJjZSogcGFja2FnZSDigJhSQ29sb3JCcmV3ZXLigJkgLi4uXG4qKiBwYWNrYWdlIOKAmFJDb2xvckJyZXdlcuKAmSBzdWNjZXNzZnVsbHkgdW5wYWNrZWQgYW5kIE1ENSBzdW1zIGNoZWNrZWRcbioqIHVzaW5nIHN0YWdlZCBpbnN0YWxsYXRpb25cbioqIFJcbioqIGluc3RcbioqIGJ5dGUtY29tcGlsZSBhbmQgcHJlcGFyZSBwYWNrYWdlIGZvciBsYXp5IGxvYWRpbmdcbioqIGhlbHBcbioqKiBpbnN0YWxsaW5nIGhlbHAgaW5kaWNlc1xuKiogYnVpbGRpbmcgcGFja2FnZSBpbmRpY2VzXG4qKiB0ZXN0aW5nIGlmIGluc3RhbGxlZCBwYWNrYWdlIGNhbiBiZSBsb2FkZWQgZnJvbSB0ZW1wb3JhcnkgbG9jYXRpb25cbioqIHRlc3RpbmcgaWYgaW5zdGFsbGVkIHBhY2thZ2UgY2FuIGJlIGxvYWRlZCBmcm9tIGZpbmFsIGxvY2F0aW9uXG4qKiB0ZXN0aW5nIGlmIGluc3RhbGxlZCBwYWNrYWdlIGtlZXBzIGEgcmVjb3JkIG9mIHRlbXBvcmFyeSBpbnN0YWxsYXRpb24gcGF0aFxuKiBET05FIChSQ29sb3JCcmV3ZXIpXG5cblRoZSBkb3dubG9hZGVkIHNvdXJjZSBwYWNrYWdlcyBhcmUgaW5cblx04oCYL3ByaXZhdGUvdmFyL2ZvbGRlcnMva3ovNjcxbnl0ang2d2JiNnF2dmZwdjdqd3QwMDAwMGduL1QvUnRtcGRqQjZuQy9kb3dubG9hZGVkX3BhY2thZ2Vz4oCZXG4ifQ== -->
+<pre><code>installing the source package ‘RColorBrewer’
+
+trying URL &#39;https://cran.rstudio.com/src/contrib/RColorBrewer_1.1-3.tar.gz&#39;
+Content type &#39;application/x-gzip&#39; length 11638 bytes (11 KB)
+==================================================
+downloaded 11 KB
+
+* installing *source* package ‘RColorBrewer’ ...
+** package ‘RColorBrewer’ successfully unpacked and MD5 sums checked
+** using staged installation
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded from temporary location
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (RColorBrewer)
+
+The downloaded source packages are in
+    ‘/private/var/folders/kz/671nytjx6wbb6qvvfpv7jwt00000gn/T/RtmpdjB6nC/downloaded_packages’</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSgndHhpbXBvcnQnKVxubGlicmFyeShcIkRFU2VxMlwiKVxuYGBgIn0= -->
+<pre class="r"><code>library(&#39;tximport&#39;)
+library(&quot;DESeq2&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2FtcGxlX25hbWVzIDwtIGMoJ1BEQUMyNTMnLCdQREFDMjgyJywnUERBQzI4NicsJ1BEQUMzMTYnLCdQREFDMjY2JywnUERBQzI3MycsJ1BEQUMzMDYnLCdQREFDMzE4JylcbnNhbXBsZV9jb25kaXRpb24gPC0gYyhyZXAoJ2hpZ2hTdWNyb3NlJyw0KSxyZXAoJ2xvd1N1Y3Jvc2UnLDQpKVxuXG5maWxlcyA8LSBmaWxlLnBhdGgoXCJuZ3Mud2VlazEwXCIsc2FtcGxlX25hbWVzLHBhc3RlKHNhbXBsZV9uYW1lcyxcIi50cmFuc2NyaXB0c19xdWFudFwiLHNlcD1cIlwiKSwncXVhbnQuc2YnKVxubmFtZXMoZmlsZXMpIDwtIHNhbXBsZV9uYW1lc1xuXG50eDJnZW5lIDwtIHJlYWQudGFibGUoXCJQZGFjX0JhcmhlZV9jaHJfdW5hbl8xODAxMjZfbWFrZXJfSEMudHgyZ2VuZVwiLGhlYWRlcj1GLHNlcD1cIixcIilcblxudHhpIDwtIHR4aW1wb3J0KGZpbGVzLCB0eXBlPVwic2FsbW9uXCIsIHR4MmdlbmU9dHgyZ2VuZSlcblxuc2FtcGxlcyA8LSBkYXRhLmZyYW1lKHNhbXBsZV9uYW1lcz1zYW1wbGVfbmFtZXMsY29uZGl0aW9uPXNhbXBsZV9jb25kaXRpb24pXG5yb3cubmFtZXMoc2FtcGxlcykgPC0gc2FtcGxlX25hbWVzXG5Zb3UgbWF5IG5vdyBidWlsZCB0aGUgREVTZXFEYXRhU2V0IG9iamVjdCBhcyBmb2xsb3dzOlxuXG5gYGAifQ== -->
+<pre class="r"><code>sample_names &lt;- c(&#39;PDAC253&#39;,&#39;PDAC282&#39;,&#39;PDAC286&#39;,&#39;PDAC316&#39;,&#39;PDAC266&#39;,&#39;PDAC273&#39;,&#39;PDAC306&#39;,&#39;PDAC318&#39;)
+sample_condition &lt;- c(rep(&#39;highSucrose&#39;,4),rep(&#39;lowSucrose&#39;,4))
+
+files &lt;- file.path(&quot;ngs.week10&quot;,sample_names,paste(sample_names,&quot;.transcripts_quant&quot;,sep=&quot;&quot;),&#39;quant.sf&#39;)
+names(files) &lt;- sample_names
+
+tx2gene &lt;- read.table(&quot;Pdac_Barhee_chr_unan_180126_maker_HC.tx2gene&quot;,header=F,sep=&quot;,&quot;)
+
+txi &lt;- tximport(files, type=&quot;salmon&quot;, tx2gene=tx2gene)
+
+samples &lt;- data.frame(sample_names=sample_names,condition=sample_condition)
+row.names(samples) &lt;- sample_names
+You may now build the DESeqDataSet object as follows:
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBjcmVhdGUgREVTZXFEYXRhU2V0IG9iamVjdFxuXG5kZHNUeGkgPC0gREVTZXFEYXRhU2V0RnJvbVR4aW1wb3J0KHR4aSxcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY29sRGF0YSA9IHNhbXBsZXMsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGRlc2lnbiA9IH4gY29uZGl0aW9uKVxuY2xhc3MoZGRzVHhpKVxuYGBgIn0= -->
+<pre class="r"><code># create DESeqDataSet object
+
+ddsTxi &lt;- DESeqDataSetFromTximport(txi,
+                                   colData = samples,
+                                   design = ~ condition)
+class(ddsTxi)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAidHhpbXBvcnQsREVTZXEyIEFuYWx5c2lzIFN1Y3Jvc2UgRGF0ZSBQYWxtIFNhbXBsZXMiCm91dHB1dDogaHRtbF9ub3RlYm9vawotLS0KCgoKYGBge3J9CnBsb3QoY2FycykKYGBgCgoKCg==</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAidHhpbXBvcnQsREVTZXEyIEFuYWx5c2lzIFN1Y3Jvc2UgRGF0ZSBQYWxtIFNhbXBsZXMiCm91dHB1dDogaHRtbF9ub3RlYm9vawotLS0KYGBge3J9CmlmICghcmVxdWlyZSgiQmlvY01hbmFnZXIiLCBxdWlldGx5ID0gVFJVRSkpCiAgICBpbnN0YWxsLnBhY2thZ2VzKCJCaW9jTWFuYWdlciIpCgpCaW9jTWFuYWdlcjo6aW5zdGFsbCgidHhpbXBvcnQiKQpgYGAKCmBgYHtyfQpsaWJyYXJ5KCd0eGltcG9ydCcpCmxpYnJhcnkoIkRFU2VxMiIpCmBgYAoKCgpgYGB7cn0Kc2FtcGxlX25hbWVzIDwtIGMoJ1BEQUMyNTMnLCdQREFDMjgyJywnUERBQzI4NicsJ1BEQUMzMTYnLCdQREFDMjY2JywnUERBQzI3MycsJ1BEQUMzMDYnLCdQREFDMzE4JykKc2FtcGxlX2NvbmRpdGlvbiA8LSBjKHJlcCgnaGlnaFN1Y3Jvc2UnLDQpLHJlcCgnbG93U3Vjcm9zZScsNCkpCgpmaWxlcyA8LSBmaWxlLnBhdGgoIm5ncy53ZWVrMTAiLHNhbXBsZV9uYW1lcyxwYXN0ZShzYW1wbGVfbmFtZXMsIi50cmFuc2NyaXB0c19xdWFudCIsc2VwPSIiKSwncXVhbnQuc2YnKQpuYW1lcyhmaWxlcykgPC0gc2FtcGxlX25hbWVzCgp0eDJnZW5lIDwtIHJlYWQudGFibGUoIlBkYWNfQmFyaGVlX2Nocl91bmFuXzE4MDEyNl9tYWtlcl9IQy50eDJnZW5lIixoZWFkZXI9RixzZXA9IiwiKQoKdHhpIDwtIHR4aW1wb3J0KGZpbGVzLCB0eXBlPSJzYWxtb24iLCB0eDJnZW5lPXR4MmdlbmUpCgpzYW1wbGVzIDwtIGRhdGEuZnJhbWUoc2FtcGxlX25hbWVzPXNhbXBsZV9uYW1lcyxjb25kaXRpb249c2FtcGxlX2NvbmRpdGlvbikKcm93Lm5hbWVzKHNhbXBsZXMpIDwtIHNhbXBsZV9uYW1lcwpZb3UgbWF5IG5vdyBidWlsZCB0aGUgREVTZXFEYXRhU2V0IG9iamVjdCBhcyBmb2xsb3dzOgoKYGBgCmBgYHtyfQojIGNyZWF0ZSBERVNlcURhdGFTZXQgb2JqZWN0CgpkZHNUeGkgPC0gREVTZXFEYXRhU2V0RnJvbVR4aW1wb3J0KHR4aSwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb2xEYXRhID0gc2FtcGxlcywKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBkZXNpZ24gPSB+IGNvbmRpdGlvbikKY2xhc3MoZGRzVHhpKQpgYGAKCgoK</div>
 
 
 

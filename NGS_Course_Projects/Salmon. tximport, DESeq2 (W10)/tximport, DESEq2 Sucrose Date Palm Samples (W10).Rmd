@@ -2,11 +2,43 @@
 title: "tximport,DESeq2 Analysis Sucrose Date Palm Samples"
 output: html_notebook
 ---
+```{r}
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("tximport")
+```
+
+```{r}
+library('tximport')
+library("DESeq2")
+```
 
 
 
 ```{r}
-plot(cars)
+sample_names <- c('PDAC253','PDAC282','PDAC286','PDAC316','PDAC266','PDAC273','PDAC306','PDAC318')
+sample_condition <- c(rep('highSucrose',4),rep('lowSucrose',4))
+
+files <- file.path("ngs.week10",sample_names,paste(sample_names,".transcripts_quant",sep=""),'quant.sf')
+names(files) <- sample_names
+
+tx2gene <- read.table("Pdac_Barhee_chr_unan_180126_maker_HC.tx2gene",header=F,sep=",")
+
+txi <- tximport(files, type="salmon", tx2gene=tx2gene)
+
+samples <- data.frame(sample_names=sample_names,condition=sample_condition)
+row.names(samples) <- sample_names
+You may now build the DESeqDataSet object as follows:
+
+```
+```{r}
+# create DESeqDataSet object
+
+ddsTxi <- DESeqDataSetFromTximport(txi,
+                                   colData = samples,
+                                   design = ~ condition)
+class(ddsTxi)
 ```
 
 
