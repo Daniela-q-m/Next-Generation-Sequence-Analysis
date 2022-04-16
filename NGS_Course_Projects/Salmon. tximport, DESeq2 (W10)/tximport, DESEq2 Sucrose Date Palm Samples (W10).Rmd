@@ -1,7 +1,13 @@
 ---
 title: "tximport,DESeq2 Analysis Sucrose Date Palm Samples"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document: default
 ---
+Daniela Quijano
+NGS W10
 ```{r}
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
@@ -14,24 +20,45 @@ library('tximport')
 library("DESeq2")
 ```
 
+```{r}
+#working Directory: /Users/danielaquijano/Documents/NYU Masters/SPRING 2022/NGS Class/Week 10/Week 10/
+```
 
-
+Import the “quant.sf” files for each sample into DESeq2 as a DESeqDataSet object.
 ```{r}
 sample_names <- c('PDAC253','PDAC282','PDAC286','PDAC316','PDAC266','PDAC273','PDAC306','PDAC318')
 sample_condition <- c(rep('highSucrose',4),rep('lowSucrose',4))
+```
 
-files <- file.path("ngs.week10",sample_names,paste(sample_names,".transcripts_quant",sep=""),'quant.sf')
+```{r}
+files <- file.path('/Users/danielaquijano/Documents/NYU Masters/SPRING 2022/NGS Class/Week10',paste(sample_names,".transcripts_quant",sep=""),'quant.sf')
+
 names(files) <- sample_names
 
-tx2gene <- read.table("Pdac_Barhee_chr_unan_180126_maker_HC.tx2gene",header=F,sep=",")
+```
+```{r}
+#Check that filepaths created in files actually exist by printing files and making sure file.exists()=T
+ file.exists('/Users/danielaquijano/Documents/NYU Masters/SPRING 2022/NGS Class/Week10/PDAC253.transcripts_quant/quant.sf')
+```
+```{r}
+print(files)
+```
 
+```{r}
+
+tx2gene <- read.table('/Users/danielaquijano/Documents/NYU Masters/SPRING 2022/NGS Class/Week10/Pdac_Barhee_chr_unan_180126_maker_HC.tx2gene',header=F,sep=",")
+```
+```{r}
 txi <- tximport(files, type="salmon", tx2gene=tx2gene)
 
 samples <- data.frame(sample_names=sample_names,condition=sample_condition)
 row.names(samples) <- sample_names
-You may now build the DESeqDataSet object as follows:
-
 ```
+```{r}
+samples
+```
+
+
 ```{r}
 # create DESeqDataSet object
 
@@ -40,6 +67,167 @@ ddsTxi <- DESeqDataSetFromTximport(txi,
                                    design = ~ condition)
 class(ddsTxi)
 ```
+```{r}
+#8 columns (samples), 28340 rows (genes)
+ddsTxi
+```
+For deseq analysis, remove genes with fewer than 10 reads and use “lfcShrink” in favor of the “results” function when creating the DESeqResults object. Take care in defining the “contrast” argument to lfcShrink (see Week 9 Assignment). The output should be a set of results ordered based on the adjusted p-value.
 
 
+```{r}
+library(dplyr)
+```
+```{r}
+library(pheatmap)
+```
+```{r}
+library(ggplot2)
+```
 
+```{r}
+#removing genes with 10 or fewer reads
+keep <- rowSums(counts(ddsTxi)) >= 10
+ddsTxi <- ddsTxi[keep,]
+```
+```{r}
+#run the DESeq wrapper function. 
+
+ddsTxi <- DESeq(ddsTxi)
+class(ddsTxi) # Determine the type of object
+```
+```{r}
+rawcounts.matrix <- counts(ddsTxi,normalized=F)
+normalizedcounts.matrix <- counts(ddsTxi,normalized=T)
+class(rawcounts.matrix)
+```
+```{r}
+head(normalizedcounts.matrix)
+```
+```{r}
+ddsTxi
+```
+```{r}
+# “rlog” transform the normalized counts and perform hierarchical clustering of samples:
+rld <- rlog(ddsTxi)
+dists <- dist(t(assay(ddsTxi)))
+plot(hclust(dists))
+```
+```{r}
+#Distance Matrix
+dists
+```
+```{r}
+#Make PCA plot
+plotPCA(rld)
+```
+Contrast defined relative to low sucrose. 
+```{r}
+#Results from the DESeq2 analysis can be extracted from the DESeqDataSet object using the results function.
+res <- results(ddsTxi, contrast = c('condition','lowSucrose','highSucrose') )
+class(res) 
+```
+### Q3.3. Report the results table for the top 10 differentially expressed genes according to adjusted p-value (i.e., FDR). 
+```{r}
+#sort the data ascending on p-value. 
+#most significant differentially expressed gene at the top.
+resOrdered <- res[order(res$pvalue),] 
+head(resOrdered,10) # View the 10 most significant genes
+
+```
+
+#Q3.2
+Histogram trend:
+
+an enrichment of low p-values. This is the expected result if there is a large class of differentially expressed genes between treatment and control.
+
+
+```{r}
+ggplot(as.data.frame(res),aes(pvalue)) + geom_histogram(fill="light blue",color='black')+ggtitle('Raw (uncorrected) p-values from the DESeqResults object')
+```
+
+```{r}
+#Filter genes from normalized counts using the top 30 most expressed genes
+norm_counts_top_30=normalizedcounts.matrix[rownames(head(resOrdered,30)), ]
+```
+```{r}
+head(norm_counts_top_30)
+```
+
+```{r}
+sampleTable <- data.frame(sampleName = sample_names,
+                          fileName = sample_names,
+                          condition = sample_condition)
+```
+
+```{r}
+#Here I arrange the annotation columns to generate an annotated and clsutered heatmap using pheatmap
+annotation_columns=sampleTable
+annotation_columns
+```
+```{r}
+annotation_columns$fileName <- NULL
+annotation_columns
+```
+
+
+```{r}
+row.names(annotation_columns) <- colnames(norm_counts_top_30)
+```
+```{r}
+annotation_columns
+```
+```{r}
+annotation_columns$sampleName <- NULL
+```
+```{r}
+pheatmap(norm_counts_top_30, color=colorRampPalette(c("white", "light blue", "blue"))(30), scale="row", cluster_cols = T, show_rownames = T,fontsize_row = 4, fontsize_col = 4,labels_row = rownames(dists),main='Differentially Expressed genes with hierarchical clustering',annotation_col =annotation_columns )
+```
+### Q3.3
+
+
+Candidate genes:
+
+Pdac_HC_chr14G0022900 (cell wall invertase enzyme)
+
+Pdac_HC_chr14G0023100 (cell wall invertase enzyme)
+
+Pdac_HC_chr14G0028200 (alkaline/neutral invertase enzyme)
+
+The gene that is likely biologically and statistifcallhy differentially expressed is Pdac_HC_chr14G0022900. The p value is really small at 1.59e-57 and the log fold change is almost ten. The gene Pdac_HC_chr14G0023100 is also likely biologically and statistically differentially expressed with a 6 fold log fold change and p value at 1.23e-21 p value. It is hard to say whether the last gene, Pdac_HC_chr14G0028200 is differentially expressed since the log fold change is not very high at 0.48 and the p value is 4.8e-2 which would not pass an FDR correction.
+
+```{r}
+gene_search=c('Pdac_HC_chr14G0022900','Pdac_HC_chr14G0023100','Pdac_HC_chr14G0028200')
+#Filter results dataframe with a list.
+gene_search_results<-resOrdered[c(gene_search),]
+gene_search_results
+```
+### Q3.4
+
+In this plot, black values are the original genewise dispersion values and blue are the adjusted values based on the model fit (red line)
+Generate three dispersion-mean plots for all three methods (‘parametric’,‘local’ and ‘mean’) 
+
+As seen in the plots below the main difference is in the shape of the fitted line. Both parametric and local look very similar. The fit line for mean is completely horizontal and it brings the rest of the points closer to the mean. 
+
+I do not think that the trend line fit type should be changed from parametric to another setting because the dispersion estimates slightly decrease over the mean but then converge. In this case parametric is a suitable fit type.
+```{r}
+par_disp <- estimateDispersions(ddsTxi, fitType = "parametric")
+loc_dip <- estimateDispersions(ddsTxi, fitType = "local")
+avg_disp<-estimateDispersions(ddsTxi, fitType = "mean")
+
+
+```
+```{r}
+plotDispEsts(par_disp, main= "dispEst: parametric")
+
+```
+```{r}
+plotDispEsts(loc_dip, main= "dispEst: local")
+```
+```{r}
+plotDispEsts(avg_disp, main= "dispEst: mean")
+```
+
+### Q3.5 What are three reasons why the Salmon + tximport + DESeq2 workflow may be preferred over the STAR + htseq-count + DESeq2 workflow? [ 1 point ]
+-length variation among alternative splice variants is not accounted for in the STAR + htseq-count + DESeq2 and related workflows. According to documentation, salmon and tximport workflow' corrects for any potential changes in gene length across samples'
+-According to documentation you can save time and disk space using salmon and tximport
+-You can avoid discarding reads that map to multiple genes. 

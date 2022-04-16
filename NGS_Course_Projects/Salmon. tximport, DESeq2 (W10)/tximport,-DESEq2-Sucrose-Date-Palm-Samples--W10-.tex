@@ -1,0 +1,1013 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\title{tximport,DESeq2 Analysis Sucrose Date Palm Samples}
+\author{}
+\date{\vspace{-2.5em}}
+
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={tximport,DESeq2 Analysis Sucrose Date Palm Samples},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\begin{document}
+\maketitle
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\FunctionTok{require}\NormalTok{(}\StringTok{"BiocManager"}\NormalTok{, }\AttributeTok{quietly =} \ConstantTok{TRUE}\NormalTok{))}
+    \FunctionTok{install.packages}\NormalTok{(}\StringTok{"BiocManager"}\NormalTok{)}
+
+\NormalTok{BiocManager}\SpecialCharTok{::}\FunctionTok{install}\NormalTok{(}\StringTok{"tximport"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Bioconductor version 3.14 (BiocManager 1.30.16), R 4.1.2 (2021-11-01)
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: package(s) not installed when version(s) same as current; use `force = TRUE` to
+##   re-install: 'tximport'
+\end{verbatim}
+
+\begin{verbatim}
+## Old packages: 'blob', 'broom', 'RcppEigen', 'scales', 'vctrs'
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(}\StringTok{\textquotesingle{}tximport\textquotesingle{}}\NormalTok{)}
+\FunctionTok{library}\NormalTok{(}\StringTok{"DESeq2"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: S4Vectors
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: stats4
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: BiocGenerics
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'BiocGenerics'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:stats':
+## 
+##     IQR, mad, sd, var, xtabs
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     anyDuplicated, append, as.data.frame, basename, cbind, colnames,
+##     dirname, do.call, duplicated, eval, evalq, Filter, Find, get, grep,
+##     grepl, intersect, is.unsorted, lapply, Map, mapply, match, mget,
+##     order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
+##     rbind, Reduce, rownames, sapply, setdiff, sort, table, tapply,
+##     union, unique, unsplit, which.max, which.min
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'S4Vectors'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     expand.grid, I, unname
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: IRanges
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: GenomicRanges
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: GenomeInfoDb
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: SummarizedExperiment
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: MatrixGenerics
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: matrixStats
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'MatrixGenerics'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:matrixStats':
+## 
+##     colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,
+##     colCounts, colCummaxs, colCummins, colCumprods, colCumsums,
+##     colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,
+##     colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,
+##     colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,
+##     colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,
+##     colWeightedMeans, colWeightedMedians, colWeightedSds,
+##     colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,
+##     rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,
+##     rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,
+##     rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,
+##     rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,
+##     rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,
+##     rowWeightedMads, rowWeightedMeans, rowWeightedMedians,
+##     rowWeightedSds, rowWeightedVars
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: Biobase
+\end{verbatim}
+
+\begin{verbatim}
+## Welcome to Bioconductor
+## 
+##     Vignettes contain introductory material; view with
+##     'browseVignettes()'. To cite Bioconductor, see
+##     'citation("Biobase")', and for packages 'citation("pkgname")'.
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'Biobase'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:MatrixGenerics':
+## 
+##     rowMedians
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:matrixStats':
+## 
+##     anyMissing, rowMedians
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#working Directory: /Users/danielaquijano/Documents/NYU Masters/SPRING 2022/NGS Class/Week 10/Week 10/}
+\end{Highlighting}
+\end{Shaded}
+
+Import the ``quant.sf'' files for each sample into DESeq2 as a
+DESeqDataSet object.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sample\_names }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}PDAC253\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}PDAC282\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}PDAC286\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}PDAC316\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}PDAC266\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}PDAC273\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}PDAC306\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}PDAC318\textquotesingle{}}\NormalTok{)}
+\NormalTok{sample\_condition }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FunctionTok{rep}\NormalTok{(}\StringTok{\textquotesingle{}highSucrose\textquotesingle{}}\NormalTok{,}\DecValTok{4}\NormalTok{),}\FunctionTok{rep}\NormalTok{(}\StringTok{\textquotesingle{}lowSucrose\textquotesingle{}}\NormalTok{,}\DecValTok{4}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{files }\OtherTok{\textless{}{-}} \FunctionTok{file.path}\NormalTok{(}\StringTok{\textquotesingle{}/Users/danielaquijano/Documents/NYU Masters/SPRING 2022/NGS Class/Week10\textquotesingle{}}\NormalTok{,}\FunctionTok{paste}\NormalTok{(sample\_names,}\StringTok{".transcripts\_quant"}\NormalTok{,}\AttributeTok{sep=}\StringTok{""}\NormalTok{),}\StringTok{\textquotesingle{}quant.sf\textquotesingle{}}\NormalTok{)}
+
+\FunctionTok{names}\NormalTok{(files) }\OtherTok{\textless{}{-}}\NormalTok{ sample\_names}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Check that filepaths created in files actually exist by printing files and making sure file.exists()=T}
+ \FunctionTok{file.exists}\NormalTok{(}\StringTok{\textquotesingle{}/Users/danielaquijano/Documents/NYU Masters/SPRING 2022/NGS Class/Week10/PDAC253.transcripts\_quant/quant.sf\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(files)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                                                                                                       PDAC253 
+## "/Users/danielaquijano/Documents/NYU Masters/SPRING 2022/NGS Class/Week10/PDAC253.transcripts_quant/quant.sf" 
+##                                                                                                       PDAC282 
+## "/Users/danielaquijano/Documents/NYU Masters/SPRING 2022/NGS Class/Week10/PDAC282.transcripts_quant/quant.sf" 
+##                                                                                                       PDAC286 
+## "/Users/danielaquijano/Documents/NYU Masters/SPRING 2022/NGS Class/Week10/PDAC286.transcripts_quant/quant.sf" 
+##                                                                                                       PDAC316 
+## "/Users/danielaquijano/Documents/NYU Masters/SPRING 2022/NGS Class/Week10/PDAC316.transcripts_quant/quant.sf" 
+##                                                                                                       PDAC266 
+## "/Users/danielaquijano/Documents/NYU Masters/SPRING 2022/NGS Class/Week10/PDAC266.transcripts_quant/quant.sf" 
+##                                                                                                       PDAC273 
+## "/Users/danielaquijano/Documents/NYU Masters/SPRING 2022/NGS Class/Week10/PDAC273.transcripts_quant/quant.sf" 
+##                                                                                                       PDAC306 
+## "/Users/danielaquijano/Documents/NYU Masters/SPRING 2022/NGS Class/Week10/PDAC306.transcripts_quant/quant.sf" 
+##                                                                                                       PDAC318 
+## "/Users/danielaquijano/Documents/NYU Masters/SPRING 2022/NGS Class/Week10/PDAC318.transcripts_quant/quant.sf"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tx2gene }\OtherTok{\textless{}{-}} \FunctionTok{read.table}\NormalTok{(}\StringTok{\textquotesingle{}/Users/danielaquijano/Documents/NYU Masters/SPRING 2022/NGS Class/Week10/Pdac\_Barhee\_chr\_unan\_180126\_maker\_HC.tx2gene\textquotesingle{}}\NormalTok{,}\AttributeTok{header=}\NormalTok{F,}\AttributeTok{sep=}\StringTok{","}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{txi }\OtherTok{\textless{}{-}} \FunctionTok{tximport}\NormalTok{(files, }\AttributeTok{type=}\StringTok{"salmon"}\NormalTok{, }\AttributeTok{tx2gene=}\NormalTok{tx2gene)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## reading in files with read_tsv
+\end{verbatim}
+
+\begin{verbatim}
+## 1 2 3 4 5 6 7 8 
+## summarizing abundance
+## summarizing counts
+## summarizing length
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{samples }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{sample\_names=}\NormalTok{sample\_names,}\AttributeTok{condition=}\NormalTok{sample\_condition)}
+\FunctionTok{row.names}\NormalTok{(samples) }\OtherTok{\textless{}{-}}\NormalTok{ sample\_names}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{samples}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         sample_names   condition
+## PDAC253      PDAC253 highSucrose
+## PDAC282      PDAC282 highSucrose
+## PDAC286      PDAC286 highSucrose
+## PDAC316      PDAC316 highSucrose
+## PDAC266      PDAC266  lowSucrose
+## PDAC273      PDAC273  lowSucrose
+## PDAC306      PDAC306  lowSucrose
+## PDAC318      PDAC318  lowSucrose
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# create DESeqDataSet object}
+
+\NormalTok{ddsTxi }\OtherTok{\textless{}{-}} \FunctionTok{DESeqDataSetFromTximport}\NormalTok{(txi,}
+                                   \AttributeTok{colData =}\NormalTok{ samples,}
+                                   \AttributeTok{design =} \SpecialCharTok{\textasciitilde{}}\NormalTok{ condition)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in DESeqDataSet(se, design = design, ignoreRank): some variables in
+## design formula are characters, converting to factors
+\end{verbatim}
+
+\begin{verbatim}
+## using counts and average transcript lengths from tximport
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{class}\NormalTok{(ddsTxi)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "DESeqDataSet"
+## attr(,"package")
+## [1] "DESeq2"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#8 columns (samples), 28340 rows (genes)}
+\NormalTok{ddsTxi}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## class: DESeqDataSet 
+## dim: 28340 8 
+## metadata(1): version
+## assays(2): counts avgTxLength
+## rownames(28340): Pdac_HC_000007FG0000100 Pdac_HC_000007FG0000200 ...
+##   Pdac_HC_chr9G0155000 Pdac_HC_chr9G0155100
+## rowData names(0):
+## colnames(8): PDAC253 PDAC282 ... PDAC306 PDAC318
+## colData names(2): sample_names condition
+\end{verbatim}
+
+For deseq analysis, remove genes with fewer than 10 reads and use
+``lfcShrink'' in favor of the ``results'' function when creating the
+DESeqResults object. Take care in defining the ``contrast'' argument to
+lfcShrink (see Week 9 Assignment). The output should be a set of results
+ordered based on the adjusted p-value.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(dplyr)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Attaching package: 'dplyr'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:Biobase':
+## 
+##     combine
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:matrixStats':
+## 
+##     count
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:GenomicRanges':
+## 
+##     intersect, setdiff, union
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:GenomeInfoDb':
+## 
+##     intersect
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:IRanges':
+## 
+##     collapse, desc, intersect, setdiff, slice, union
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:S4Vectors':
+## 
+##     first, intersect, rename, setdiff, setequal, union
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:BiocGenerics':
+## 
+##     combine, intersect, setdiff, union
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(pheatmap)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(ggplot2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#removing genes with 10 or fewer reads}
+\NormalTok{keep }\OtherTok{\textless{}{-}} \FunctionTok{rowSums}\NormalTok{(}\FunctionTok{counts}\NormalTok{(ddsTxi)) }\SpecialCharTok{\textgreater{}=} \DecValTok{10}
+\NormalTok{ddsTxi }\OtherTok{\textless{}{-}}\NormalTok{ ddsTxi[keep,]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#run the DESeq wrapper function. }
+
+\NormalTok{ddsTxi }\OtherTok{\textless{}{-}} \FunctionTok{DESeq}\NormalTok{(ddsTxi)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## estimating size factors
+\end{verbatim}
+
+\begin{verbatim}
+## using 'avgTxLength' from assays(dds), correcting for library size
+\end{verbatim}
+
+\begin{verbatim}
+## estimating dispersions
+\end{verbatim}
+
+\begin{verbatim}
+## gene-wise dispersion estimates
+\end{verbatim}
+
+\begin{verbatim}
+## mean-dispersion relationship
+\end{verbatim}
+
+\begin{verbatim}
+## final dispersion estimates
+\end{verbatim}
+
+\begin{verbatim}
+## fitting model and testing
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{class}\NormalTok{(ddsTxi) }\CommentTok{\# Determine the type of object}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "DESeqDataSet"
+## attr(,"package")
+## [1] "DESeq2"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{rawcounts.matrix }\OtherTok{\textless{}{-}} \FunctionTok{counts}\NormalTok{(ddsTxi,}\AttributeTok{normalized=}\NormalTok{F)}
+\NormalTok{normalizedcounts.matrix }\OtherTok{\textless{}{-}} \FunctionTok{counts}\NormalTok{(ddsTxi,}\AttributeTok{normalized=}\NormalTok{T)}
+\FunctionTok{class}\NormalTok{(rawcounts.matrix)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "matrix" "array"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(normalizedcounts.matrix)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                            PDAC253    PDAC282     PDAC286    PDAC316   PDAC266
+## Pdac_HC_000007FG0000100 109.704208 123.596721   53.749177 144.051138 223.97947
+## Pdac_HC_000007FG0000200  20.008589  31.264120   28.608906  25.175951  33.68535
+## Pdac_HC_000007FG0000300 426.289552 386.004495  486.252243 520.406191 373.84199
+## Pdac_HC_000007FG0000400 182.945107 315.410003 1865.817719 315.351823 432.07579
+## Pdac_HC_000007FG0000500   4.181159   6.428079    1.339707   3.149265  35.60079
+## Pdac_HC_000007FG0000600  17.225656  85.647834  106.381876  64.987084 290.84857
+##                            PDAC273     PDAC306    PDAC318
+## Pdac_HC_000007FG0000100 125.135921  110.249240 203.791592
+## Pdac_HC_000007FG0000200  44.440913   29.019411  40.622901
+## Pdac_HC_000007FG0000300 284.194412  330.003187 383.484338
+## Pdac_HC_000007FG0000400 357.535442 1106.680682 502.517118
+## Pdac_HC_000007FG0000500   8.881635    6.635475   7.117842
+## Pdac_HC_000007FG0000600  90.266906   91.819716 131.942203
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ddsTxi}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## class: DESeqDataSet 
+## dim: 20869 8 
+## metadata(1): version
+## assays(6): counts avgTxLength ... H cooks
+## rownames(20869): Pdac_HC_000007FG0000100 Pdac_HC_000007FG0000200 ...
+##   Pdac_HC_chr9G0155000 Pdac_HC_chr9G0155100
+## rowData names(22): baseMean baseVar ... deviance maxCooks
+## colnames(8): PDAC253 PDAC282 ... PDAC306 PDAC318
+## colData names(2): sample_names condition
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# “rlog” transform the normalized counts and perform hierarchical clustering of samples:}
+\NormalTok{rld }\OtherTok{\textless{}{-}} \FunctionTok{rlog}\NormalTok{(ddsTxi)}
+\NormalTok{dists }\OtherTok{\textless{}{-}} \FunctionTok{dist}\NormalTok{(}\FunctionTok{t}\NormalTok{(}\FunctionTok{assay}\NormalTok{(ddsTxi)))}
+\FunctionTok{plot}\NormalTok{(}\FunctionTok{hclust}\NormalTok{(dists))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{tximport,-DESEq2-Sucrose-Date-Palm-Samples--W10-_files/figure-latex/unnamed-chunk-21-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Distance Matrix}
+\NormalTok{dists}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          PDAC253  PDAC282  PDAC286  PDAC316  PDAC266  PDAC273  PDAC306
+## PDAC282 453665.5                                                      
+## PDAC286 423968.3 144663.5                                             
+## PDAC316 407319.9 177224.4 158907.8                                    
+## PDAC266 237909.5 370922.7 326015.2 329257.9                           
+## PDAC273 525035.6 185391.0 206458.5 226407.7 410182.9                  
+## PDAC306 156933.8 388647.9 342745.9 338336.1 108337.7 447732.1         
+## PDAC318 321308.6 191475.8 153728.4 181777.5 208544.2 244546.7 231513.7
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Make PCA plot}
+\FunctionTok{plotPCA}\NormalTok{(rld)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{tximport,-DESEq2-Sucrose-Date-Palm-Samples--W10-_files/figure-latex/unnamed-chunk-23-1.pdf}
+Contrast defined relative to low sucrose.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Results from the DESeq2 analysis can be extracted from the DESeqDataSet object using the results function.}
+\NormalTok{res }\OtherTok{\textless{}{-}} \FunctionTok{results}\NormalTok{(ddsTxi, }\AttributeTok{contrast =} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}condition\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}lowSucrose\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}highSucrose\textquotesingle{}}\NormalTok{) )}
+\FunctionTok{class}\NormalTok{(res) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "DESeqResults"
+## attr(,"package")
+## [1] "DESeq2"
+\end{verbatim}
+
+\hypertarget{q3.3.-report-the-results-table-for-the-top-10-differentially-expressed-genes-according-to-adjusted-p-value-i.e.-fdr.}{%
+\subsubsection{Q3.3. Report the results table for the top 10
+differentially expressed genes according to adjusted p-value (i.e.,
+FDR).}\label{q3.3.-report-the-results-table-for-the-top-10-differentially-expressed-genes-according-to-adjusted-p-value-i.e.-fdr.}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#sort the data ascending on p{-}value. }
+\CommentTok{\#most significant differentially expressed gene at the top.}
+\NormalTok{resOrdered }\OtherTok{\textless{}{-}}\NormalTok{ res[}\FunctionTok{order}\NormalTok{(res}\SpecialCharTok{$}\NormalTok{pvalue),] }
+\FunctionTok{head}\NormalTok{(resOrdered,}\DecValTok{10}\NormalTok{) }\CommentTok{\# View the 10 most significant genes}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## log2 fold change (MLE): condition lowSucrose vs highSucrose 
+## Wald test p-value: condition lowSucrose vs highSucrose 
+## DataFrame with 10 rows and 6 columns
+##                          baseMean log2FoldChange     lfcSE      stat
+##                         <numeric>      <numeric> <numeric> <numeric>
+## Pdac_HC_chr14G0022900   8501.9994        9.77284  0.611325  15.98633
+## Pdac_HC_chr14G0099800    634.3442      -11.12936  0.893957 -12.44955
+## Pdac_HC_000288FG0001200  286.4387        4.47849  0.443570  10.09647
+## Pdac_HC_chr14G0023100   6924.3989        6.14033  0.642618   9.55518
+## Pdac_HC_chr15G0001700    120.6265       10.14597  1.072122   9.46344
+## Pdac_HC_002675FG0000200   56.4347       -5.04492  0.578963  -8.71372
+## Pdac_HC_chr3G0041200      45.1900       -9.14916  1.072433  -8.53122
+## Pdac_HC_000654FG0000200   79.5471       -8.57155  1.017587  -8.42341
+## Pdac_HC_chr14G0000300     73.0425       -3.98599  0.496102  -8.03462
+## Pdac_HC_chr14G0000200    115.4159       -3.86422  0.481188  -8.03058
+##                              pvalue        padj
+##                           <numeric>   <numeric>
+## Pdac_HC_chr14G0022900   1.59132e-57 2.76922e-53
+## Pdac_HC_chr14G0099800   1.40643e-35 1.22374e-31
+## Pdac_HC_000288FG0001200 5.72648e-24 3.32174e-20
+## Pdac_HC_chr14G0023100   1.23364e-21 5.36694e-18
+## Pdac_HC_chr15G0001700   2.97971e-21 1.03706e-17
+## Pdac_HC_002675FG0000200 2.94068e-18 8.52896e-15
+## Pdac_HC_chr3G0041200    1.44816e-17 3.60013e-14
+## Pdac_HC_000654FG0000200 3.65695e-17 7.95477e-14
+## Pdac_HC_chr14G0000300   9.38692e-16 1.68823e-12
+## Pdac_HC_chr14G0000200   9.70137e-16 1.68823e-12
+\end{verbatim}
+
+\#Q3.2 Histogram trend:
+
+an enrichment of low p-values. This is the expected result if there is a
+large class of differentially expressed genes between treatment and
+control.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(}\FunctionTok{as.data.frame}\NormalTok{(res),}\FunctionTok{aes}\NormalTok{(pvalue)) }\SpecialCharTok{+} \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{fill=}\StringTok{"light blue"}\NormalTok{,}\AttributeTok{color=}\StringTok{\textquotesingle{}black\textquotesingle{}}\NormalTok{)}\SpecialCharTok{+}\FunctionTok{ggtitle}\NormalTok{(}\StringTok{\textquotesingle{}Raw (uncorrected) p{-}values from the DESeqResults object\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: Removed 250 rows containing non-finite values (stat_bin).
+\end{verbatim}
+
+\includegraphics{tximport,-DESEq2-Sucrose-Date-Palm-Samples--W10-_files/figure-latex/unnamed-chunk-26-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Filter genes from normalized counts using the top 30 most expressed genes}
+\NormalTok{norm\_counts\_top\_30}\OtherTok{=}\NormalTok{normalizedcounts.matrix[}\FunctionTok{rownames}\NormalTok{(}\FunctionTok{head}\NormalTok{(resOrdered,}\DecValTok{30}\NormalTok{)), ]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(norm\_counts\_top\_30)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                            PDAC253    PDAC282    PDAC286     PDAC316    PDAC266
+## Pdac_HC_chr14G0022900     18.89092   12.91353   42.64883    4.746155 28390.7497
+## Pdac_HC_chr14G0099800   1205.47336 1006.27188 1184.58370 1677.160847     0.0000
+## Pdac_HC_000288FG0001200   26.91631   17.91693   12.32149   40.948228   697.1431
+## Pdac_HC_chr14G0023100     30.73050  184.81879  439.09359  118.930971 22081.4194
+## Pdac_HC_chr15G0001700      0.00000    0.00000    0.00000    0.000000   205.7576
+## Pdac_HC_002675FG0000200   89.06550  172.57181   85.07067   91.010059     0.0000
+##                              PDAC273     PDAC306      PDAC318
+## Pdac_HC_chr14G0022900   21134.155337 8072.838101 10339.052336
+## Pdac_HC_chr14G0099800       1.263895    0.000000     0.000000
+## Pdac_HC_000288FG0001200   729.910716  454.607640   311.745070
+## Pdac_HC_chr14G0023100   15055.998671 7036.699787 10447.499346
+## Pdac_HC_chr15G0001700     211.476792  329.840901   217.936658
+## Pdac_HC_002675FG0000200     3.636150    5.670601     4.452806
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sampleTable }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{sampleName =}\NormalTok{ sample\_names,}
+                          \AttributeTok{fileName =}\NormalTok{ sample\_names,}
+                          \AttributeTok{condition =}\NormalTok{ sample\_condition)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Here I arrange the annotation columns to generate an annotated and clsutered heatmap using pheatmap}
+\NormalTok{annotation\_columns}\OtherTok{=}\NormalTok{sampleTable}
+\NormalTok{annotation\_columns}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   sampleName fileName   condition
+## 1    PDAC253  PDAC253 highSucrose
+## 2    PDAC282  PDAC282 highSucrose
+## 3    PDAC286  PDAC286 highSucrose
+## 4    PDAC316  PDAC316 highSucrose
+## 5    PDAC266  PDAC266  lowSucrose
+## 6    PDAC273  PDAC273  lowSucrose
+## 7    PDAC306  PDAC306  lowSucrose
+## 8    PDAC318  PDAC318  lowSucrose
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{annotation\_columns}\SpecialCharTok{$}\NormalTok{fileName }\OtherTok{\textless{}{-}} \ConstantTok{NULL}
+\NormalTok{annotation\_columns}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   sampleName   condition
+## 1    PDAC253 highSucrose
+## 2    PDAC282 highSucrose
+## 3    PDAC286 highSucrose
+## 4    PDAC316 highSucrose
+## 5    PDAC266  lowSucrose
+## 6    PDAC273  lowSucrose
+## 7    PDAC306  lowSucrose
+## 8    PDAC318  lowSucrose
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{row.names}\NormalTok{(annotation\_columns) }\OtherTok{\textless{}{-}} \FunctionTok{colnames}\NormalTok{(norm\_counts\_top\_30)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{annotation\_columns}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         sampleName   condition
+## PDAC253    PDAC253 highSucrose
+## PDAC282    PDAC282 highSucrose
+## PDAC286    PDAC286 highSucrose
+## PDAC316    PDAC316 highSucrose
+## PDAC266    PDAC266  lowSucrose
+## PDAC273    PDAC273  lowSucrose
+## PDAC306    PDAC306  lowSucrose
+## PDAC318    PDAC318  lowSucrose
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{annotation\_columns}\SpecialCharTok{$}\NormalTok{sampleName }\OtherTok{\textless{}{-}} \ConstantTok{NULL}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{pheatmap}\NormalTok{(norm\_counts\_top\_30, }\AttributeTok{color=}\FunctionTok{colorRampPalette}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"white"}\NormalTok{, }\StringTok{"light blue"}\NormalTok{, }\StringTok{"blue"}\NormalTok{))(}\DecValTok{30}\NormalTok{), }\AttributeTok{scale=}\StringTok{"row"}\NormalTok{, }\AttributeTok{cluster\_cols =}\NormalTok{ T, }\AttributeTok{show\_rownames =}\NormalTok{ T,}\AttributeTok{fontsize\_row =} \DecValTok{4}\NormalTok{, }\AttributeTok{fontsize\_col =} \DecValTok{4}\NormalTok{,}\AttributeTok{labels\_row =} \FunctionTok{rownames}\NormalTok{(dists),}\AttributeTok{main=}\StringTok{\textquotesingle{}Differentially Expressed genes with hierarchical clustering\textquotesingle{}}\NormalTok{,}\AttributeTok{annotation\_col =}\NormalTok{annotation\_columns )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{tximport,-DESEq2-Sucrose-Date-Palm-Samples--W10-_files/figure-latex/unnamed-chunk-35-1.pdf}
+\#\#\# Q3.3
+
+Candidate genes:
+
+Pdac\_HC\_chr14G0022900 (cell wall invertase enzyme)
+
+Pdac\_HC\_chr14G0023100 (cell wall invertase enzyme)
+
+Pdac\_HC\_chr14G0028200 (alkaline/neutral invertase enzyme)
+
+The gene that is likely biologically and statistifcallhy differentially
+expressed is Pdac\_HC\_chr14G0022900. The p value is really small at
+1.59e-57 and the log fold change is almost ten. The gene
+Pdac\_HC\_chr14G0023100 is also likely biologically and statistically
+differentially expressed with a 6 fold log fold change and p value at
+1.23e-21 p value. It is hard to say whether the last gene,
+Pdac\_HC\_chr14G0028200 is differentially expressed since the log fold
+change is not very high at 0.48 and the p value is 4.8e-2 which would
+not pass an FDR correction.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{gene\_search}\OtherTok{=}\FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}Pdac\_HC\_chr14G0022900\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}Pdac\_HC\_chr14G0023100\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}Pdac\_HC\_chr14G0028200\textquotesingle{}}\NormalTok{)}
+\CommentTok{\#Filter results dataframe with a list.}
+\NormalTok{gene\_search\_results}\OtherTok{\textless{}{-}}\NormalTok{resOrdered[}\FunctionTok{c}\NormalTok{(gene\_search),]}
+\NormalTok{gene\_search\_results}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## log2 fold change (MLE): condition lowSucrose vs highSucrose 
+## Wald test p-value: condition lowSucrose vs highSucrose 
+## DataFrame with 3 rows and 6 columns
+##                        baseMean log2FoldChange     lfcSE      stat      pvalue
+##                       <numeric>      <numeric> <numeric> <numeric>   <numeric>
+## Pdac_HC_chr14G0022900  8501.999       9.772844  0.611325  15.98633 1.59132e-57
+## Pdac_HC_chr14G0023100  6924.399       6.140332  0.642618   9.55518 1.23364e-21
+## Pdac_HC_chr14G0028200   582.729       0.487421  0.247031   1.97311 4.84827e-02
+##                              padj
+##                         <numeric>
+## Pdac_HC_chr14G0022900 2.76922e-53
+## Pdac_HC_chr14G0023100 5.36694e-18
+## Pdac_HC_chr14G0028200 2.26071e-01
+\end{verbatim}
+
+\hypertarget{q3.4}{%
+\subsubsection{Q3.4}\label{q3.4}}
+
+In this plot, black values are the original genewise dispersion values
+and blue are the adjusted values based on the model fit (red line)
+Generate three dispersion-mean plots for all three methods
+(`parametric',`local' and `mean')
+
+As seen in the plots below the main difference is in the shape of the
+fitted line. Both parametric and local look very similar. The fit line
+for mean is completely horizontal and it brings the rest of the points
+closer to the mean.
+
+I do not think that the trend line fit type should be changed from
+parametric to another setting because the dispersion estimates slightly
+decrease over the mean but then converge. In this case parametric is a
+suitable fit type.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{par\_disp }\OtherTok{\textless{}{-}} \FunctionTok{estimateDispersions}\NormalTok{(ddsTxi, }\AttributeTok{fitType =} \StringTok{"parametric"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## found already estimated dispersions, replacing these
+\end{verbatim}
+
+\begin{verbatim}
+## gene-wise dispersion estimates
+\end{verbatim}
+
+\begin{verbatim}
+## mean-dispersion relationship
+\end{verbatim}
+
+\begin{verbatim}
+## final dispersion estimates
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{loc\_dip }\OtherTok{\textless{}{-}} \FunctionTok{estimateDispersions}\NormalTok{(ddsTxi, }\AttributeTok{fitType =} \StringTok{"local"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## found already estimated dispersions, replacing these
+\end{verbatim}
+
+\begin{verbatim}
+## gene-wise dispersion estimates
+\end{verbatim}
+
+\begin{verbatim}
+## mean-dispersion relationship
+\end{verbatim}
+
+\begin{verbatim}
+## final dispersion estimates
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{avg\_disp}\OtherTok{\textless{}{-}}\FunctionTok{estimateDispersions}\NormalTok{(ddsTxi, }\AttributeTok{fitType =} \StringTok{"mean"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## found already estimated dispersions, replacing these
+\end{verbatim}
+
+\begin{verbatim}
+## gene-wise dispersion estimates
+\end{verbatim}
+
+\begin{verbatim}
+## mean-dispersion relationship
+\end{verbatim}
+
+\begin{verbatim}
+## final dispersion estimates
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plotDispEsts}\NormalTok{(par\_disp, }\AttributeTok{main=} \StringTok{"dispEst: parametric"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{tximport,-DESEq2-Sucrose-Date-Palm-Samples--W10-_files/figure-latex/unnamed-chunk-38-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plotDispEsts}\NormalTok{(loc\_dip, }\AttributeTok{main=} \StringTok{"dispEst: local"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{tximport,-DESEq2-Sucrose-Date-Palm-Samples--W10-_files/figure-latex/unnamed-chunk-39-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plotDispEsts}\NormalTok{(avg\_disp, }\AttributeTok{main=} \StringTok{"dispEst: mean"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{tximport,-DESEq2-Sucrose-Date-Palm-Samples--W10-_files/figure-latex/unnamed-chunk-40-1.pdf}
+
+\hypertarget{q3.5-what-are-three-reasons-why-the-salmon-tximport-deseq2-workflow-may-be-preferred-over-the-star-htseq-count-deseq2-workflow-1-point}{%
+\subsubsection{Q3.5 What are three reasons why the Salmon + tximport +
+DESeq2 workflow may be preferred over the STAR + htseq-count + DESeq2
+workflow? {[} 1 point
+{]}}\label{q3.5-what-are-three-reasons-why-the-salmon-tximport-deseq2-workflow-may-be-preferred-over-the-star-htseq-count-deseq2-workflow-1-point}}
+
+-length variation among alternative splice variants is not accounted for
+in the STAR + htseq-count + DESeq2 and related workflows. According to
+documentation, salmon and tximport workflow' corrects for any potential
+changes in gene length across samples' -According to documentation you
+can save time and disk space using salmon and tximport -You can avoid
+discarding reads that map to multiple genes.
+
+\end{document}
