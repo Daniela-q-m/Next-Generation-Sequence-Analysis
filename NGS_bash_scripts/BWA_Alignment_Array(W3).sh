@@ -10,8 +10,6 @@
 #SBATCH --mail-user=<dq2033@nyu.edu>
 #SBATCH --array=1-30
 
-
-
 module purge
 
 
