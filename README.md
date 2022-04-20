@@ -1,12 +1,11 @@
 # Next-Generation-Sequence-Analysis
-The purpose of this repository is to store slrum scripts, input and output files for NGS Analysis. Some of the analyses included in this repository are FASTQC analysis, genome alignment, SNP calling, and population genomics. Each folder contains a workflow file that includes a step by step of each analysis. 
+The purpose of this repository is to document the analyses that were conducted as part of the Next Generation Sequence Analysis course at New York University as part of the M.S in Bioinformatics. 
 
 A short description of each of the folders within this repository:
 
 ## NGS Course Projects
 This folder contains the projects completed in the course 'Next Generation Sequence Analysis' BIGY7653 at New York University. See below for a short description of each of the projects that have been completed and what the goals of each project were. 
-
-         
+ 
 ### Align reads to the human reference genome (W3)
 -prepare a copy human reference genome for short read alignment with the Burrows-Wheeler Aligner BWA-MEM (Homo_sapiens.GRCh38), normalize using  Picard-Tools NormalizeFasta program: https://broadinstitute.github.io/picard/command-line-overview.html#NormalizeFasta. Picard removes any white spaces in sequence identifers in the reference FASTA.<br> 
 -Create a FASTA index and a bwa index for the normalized reference genome as well as dictionary file required by the Genome Analysis Toolkit (GATK).<br> 
