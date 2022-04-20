@@ -63,3 +63,4 @@ This folder contains the projects completed in the course 'Next Generation Seque
 -Calculate FRIP scores with MACS2 output data
 -Generate quality metrics for a H3K36me3 histone modification ChIP-seq experiment from the ENCODE project.
 -Use Bioconductor ChIC package to evaluate library quality
+-To illustrate the use of the ChIC package, we will use toy control and sample H3K36me3 ChIP-seq BAMs from ENCODE.
