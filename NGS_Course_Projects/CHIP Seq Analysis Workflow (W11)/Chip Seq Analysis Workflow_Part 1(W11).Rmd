@@ -1,0 +1,267 @@
+---
+title: "ChIP Seq Analysis (W11)"
+output: html_notebook
+---
+
+Downlaod Relevant Samples from SRA
+
+```{bash}
+#!/bin/bash
+#
+#SBATCH --nodes=1
+#SBATCH --tasks-per-node=1
+#SBATCH --cpus-per-task=1
+#SBATCH --time=8:00:00
+#SBATCH --mem=16GB
+#SBATCH --job-name=sra_download_w11
+#SBATCH --mail-type=FAIL,END
+#SBATCH --mail-user=<dq2033@nyu.edu>
+
+module purge 
+
+module load sra-tools/2.10.9
+
+fastq-dump -I SRR7207011
+
+fastq-dump -I SRR7207017
+
+fastq-dump -I SRR7207089
+```
+
+Confirm download of files
+```{bash}
+[dq2033@gr048 ngs.week11]$ ls
+FASTP_PROCESSING.sh  SRA_DOWNLOAD.sh   SRR7207017.fastq
+slurm-18180112.out   SRR7207011.fastq  SRR7207089.fastq
+[dq2033@gr048 ngs.week11]$ seff 18180112
+Job ID: 18180112
+Cluster: greene
+User/Group: dq2033/dq2033
+State: COMPLETED (exit code 0)
+Cores: 1
+CPU Utilized: 00:05:28
+CPU Efficiency: 68.62% of 00:07:58 core-walltime
+Job Wall-clock time: 00:07:58
+Memory Utilized: 2.01 GB
+Memory Efficiency: 12.56% of 16.00 GB
+```
+
+Create a slurm script that will use fastp to process the single-end reads downloaded
+
+```{bash}
+#!/bin/bash
+#
+#SBATCH --nodes=1
+#SBATCH --tasks-per-node=1
+#SBATCH --cpus-per-task=1
+#SBATCH --time=4:00:00
+#SBATCH --mem=4GB
+#SBATCH --job-name=slurm_template
+#SBATCH --mail-type=FAIL
+#SBATCH --mail-user=<dq2033@nyu.edu>
+
+
+module purge
+  
+module load fastp/intel/0.20.1 #Load fastp as it exists in module avail
+
+fastp -i SRR7207011.fastq  -o out.SRR7207011.filtered.fastq  --length_required=60 --n_base_limit=50  
+fastp -i SRR7207017.fastq  -o out.SRR7207017.filtered.fastq  --length_required=60 --n_base_limit=50  
+fastp -i SRR7207089.fastq  -o out.SRR7207089.filtered.fastq  --length_required=60 --n_base_limit=50
+```
+
+Submit job using sbatch, monitor job
+```{bash}
+[dq2033@gr048 ngs.week11]$ sbatch FASTP_PROCESSING.sh
+Submitted batch job 18180211
+[dq2033@gr048 ngs.week11]$ seff 18180211
+Job ID: 18180211
+Cluster: greene
+User/Group: dq2033/dq2033
+State: COMPLETED (exit code 0)
+Cores: 1
+CPU Utilized: 00:04:20
+CPU Efficiency: 99.24% of 00:04:22 core-walltime
+Job Wall-clock time: 00:04:22
+Memory Utilized: 675.83 MB
+Memory Efficiency: 16.50% of 4.00 GB
+```
+
+Monitor output files
+```{bash}
+[dq2033@gr048 ngs.week11]$ ls
+fastp.html                     out.SRR7207017.filtered.fastq  SRA_DOWNLOAD.sh
+fastp.json                     out.SRR7207089.filtered.fastq  SRR7207011.fastq
+FASTP_PROCESSING.sh            slurm-18180112.out             SRR7207017.fastq
+out.SRR7207011.filtered.fastq  slurm-18180211.out             SRR7207089.fastq
+```
+
+Write slurm script to align reads to reference genome
+
+```{r}
+#!/bin/bash
+#
+#SBATCH --nodes=1
+#SBATCH --tasks-per-node=1
+#SBATCH --cpus-per-task=8
+#SBATCH --time=1:00:00
+#SBATCH --mem=8GB
+#SBATCH --job-name=bwamem_w11
+#SBATCH --mail-type=FAIL,END
+#SBATCH --mail-user=<dq2033@nyu.edu>
+
+
+module purge
+
+
+module load bwa/intel/0.7.17
+
+ref=/scratch/work/courses/BI7653/hw3.2022/hg38/Homo_sapiens.GRCh38.dna_sm.primary_assembly.normalized.fa
+
+bwa mem -M -t $SLURM_CPUS_PER_TASK ${ref} out.SRR7207011.filtered.fastq > SRR7207011.sam
+bwa mem -M -t $SLURM_CPUS_PER_TASK ${ref} out.SRR7207017.filtered.fastq  > SRR7207017.sam
+bwa mem -M -t $SLURM_CPUS_PER_TASK ${ref} out.SRR7207089.filtered.fastq  > SRR7207089.sam
+```
+
+Submit and monitor job
+```{bash}
+[dq2033@log-1 ngs.week11]$ seff 18180272
+Job ID: 18180272
+Cluster: greene
+User/Group: dq2033/dq2033
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 8
+CPU Utilized: 02:12:49
+CPU Efficiency: 96.24% of 02:18:00 core-walltime
+Job Wall-clock time: 00:17:15
+Memory Utilized: 7.85 GB
+Memory Efficiency: 98.10% of 8.00 GB
+```
+
+Monitor Output files:
+```{bash}
+[dq2033@log-1 ngs.week11]$ ls
+BWA_W11.sh                     out.SRR7207017.filtered.fastq  SRR7207011.fastq
+CHIP_PREPROCESSING.sh          out.SRR7207089.filtered.fastq  SRR7207011.sam
+fastp.html                     slurm-18180112.out             SRR7207017.fastq
+fastp.json                     slurm-18180211.out             SRR7207017.sam
+FASTP_PROCESSING.sh            slurm-18180272.out             SRR7207089.fastq
+out.SRR7207011.filtered.fastq  SRA_DOWNLOAD.sh                SRR7207089.sam
+```
+
+
+Write slurm script in order to filter reads with quality less than 20,convert sam files to bam, sort the sam files, and create file indexes.
+```{bash}
+#!/bin/bash
+#
+#SBATCH --nodes=1
+#SBATCH --tasks-per-node=1
+#SBATCH --cpus-per-task=8
+#SBATCH --time=8:00:00
+#SBATCH --mem=46GB
+#SBATCH --job-name=chip_Seq_w11
+#SBATCH --mail-type=FAIL,END
+#SBATCH --mail-user=<dq2033@nyu.edu>
+
+module purge
+
+module load samtools/intel/1.14
+
+#Filter reads with quality less than 20
+
+samtools view -q --20 -h SRR7207011.sam > SRR7207011_filt20.sam
+samtools view -q --20 -h SRR7207017.sam > SRR7207017_filt20.sam
+samtools view -q --20 -h SRR7207089.sam > SRR7207089_filt20.sam
+
+#Convert sam to bam for sorting
+
+samtools view -b -h SRR7207011_filt20.sam > SRR7207011_filt20.bam
+samtools view -b -h SRR7207017_filt20.sam > SRR7207017_filt20.bam
+samtools view -b -h SRR7207089_filt20.sam > SRR7207089_filt20.bam
+
+#Coordinate sort reads with Picard tools.
+
+module purge 
+
+module load picard/2.17.11
+
+java -Xmx44g -jar $PICARD_JAR SortSam \
+INPUT=SRR7207011_filt20.bam \
+OUTPUT=SRR7207011_sorted.bam \
+SORT_ORDER=coordinate \
+TMP_DIR="${SLURM_JOBTMP}" \
+MAX_RECORDS_IN_RAM=10000000 \
+VALIDATION_STRINGENCY=LENIENT
+
+java -Xmx44g -jar $PICARD_JAR SortSam \
+INPUT=SRR7207017_filt20.bam \
+OUTPUT=SRR7207017_sorted.bam \
+SORT_ORDER=coordinate \
+TMP_DIR="${SLURM_JOBTMP}" \
+MAX_RECORDS_IN_RAM=10000000 \
+VALIDATION_STRINGENCY=LENIENT
+
+java -Xmx44g -jar $PICARD_JAR SortSam \
+INPUT=SRR7207089_filt20.bam \
+OUTPUT=SRR7207089_sorted.bam \
+SORT_ORDER=coordinate \
+TMP_DIR="${SLURM_JOBTMP}" \
+MAX_RECORDS_IN_RAM=10000000 \
+VALIDATION_STRINGENCY=LENIENT
+
+#Index filtered and sorted BAMs
+
+module purge
+
+module load samtools/intel/1.14
+
+samtools index SRR7207011_sorted.bam
+samtools index SRR7207017_sorted.bam
+samtools index SRR7207089_sorted.bam 
+
+```
+
+### Run MACS2 to call peaks
+
+```{bash}
+#!/bin/bash
+#
+#SBATCH --nodes=1
+#SBATCH --tasks-per-node=1
+#SBATCH --cpus-per-task=8
+#SBATCH --time=8:00:00
+#SBATCH --mem=8GB
+#SBATCH --job-name=MACS_w11
+#SBATCH --mail-type=FAIL,END
+#SBATCH --mail-user=<dq2033@nyu.edu>
+
+module purge
+
+module load macs2/2.1.1.20160309
+
+macs2 callpeak -t SRR7207011_sorted.bam -c SRR7207089_sorted.bam -f BAM -g hs -n SRR7207011_MACS -B -q 0.01
+macs2 callpeak -t SRR7207017_sorted.bam -c SRR7207089_sorted.bam -f BAM -g hs -n SRR7207017_MACS -B -q 0.01
+```
+
+Monitor script output:
+```{bash}
+[dq2033@log-1 ngs.week11]$ ls
+BWA_W11.sh                     SRR7207011.fastq                    SRR7207017_MACS_model.r
+CHIP_PREPROCESSING.sh          SRR7207011_filt20.bam               SRR7207017_MACS_peaks.narrowPeak
+fastp.html                     SRR7207011_filt20.sam               SRR7207017_MACS_peaks.xls
+fastp.json                     SRR7207011_MACS_control_lambda.bdg  SRR7207017_MACS_summits.bed
+FASTP_PROCESSING.sh            SRR7207011_MACS_model.r             SRR7207017_MACS_treat_pileup.bdg
+MACS2.sh                       SRR7207011_MACS_peaks.narrowPeak    SRR7207017.sam
+out.SRR7207011.filtered.fastq  SRR7207011_MACS_peaks.xls           SRR7207017_sorted.bam
+out.SRR7207017.filtered.fastq  SRR7207011_MACS_summits.bed         SRR7207017_sorted.bam.bai
+out.SRR7207089.filtered.fastq  SRR7207011_MACS_treat_pileup.bdg    SRR7207089.fastq
+slurm-18180112.out             SRR7207011.sam                      SRR7207089_filt20.bam
+slurm-18180211.out             SRR7207011_sorted.bam               SRR7207089_filt20.sam
+slurm-18180272.out             SRR7207011_sorted.bam.bai           SRR7207089.sam
+slurm-18180505.out             SRR7207017.fastq                    SRR7207089_sorted.bam
+slurm-18184370.out             SRR7207017_filt20.bam               SRR7207089_sorted.bam.bai
+slurm-18184687.out             SRR7207017_filt20.sam
+SRA_DOWNLOAD.sh                SRR7207017_MACS_control_lambda.bdg
+```
+
