@@ -42,7 +42,6 @@ This folder contains the projects completed in the course 'Next Generation Seque
 -Calculate coverage depth in genomic intervals to identify a copy number variant <br> 
 
 
-
 ### Genome Alignment (Using STAR) (W8)
 -Align and coordinate sort RNA-seq reads to a reference genome assembly with the STAR aligner. <br>
 -Create a BAM index file for each sample.<br>
@@ -60,3 +59,8 @@ This folder contains the projects completed in the course 'Next Generation Seque
 - Align reads from ChIP samples and a control to the human reference genome and apply a narrow peak-calling method.
 - The data are single end (1 x 65 bp) fastqs sequenced on an Illumina Hi-Seq sequencer by Singh et al. 2018: https://www.life-science-alliance.org/content/2/1/e201800115
 - The SRA run accession number for the reads are: SRR7207011 is the Androgen Receptor (AR) ChIP from patient 1 tumor (P1_AR_DSG) SRR7207017 is the Androgen Receptor (AR) ChIP from patient 2 tumor (P2_AR_DSG) SRR7207089 is the “input” (P_Input_DSG)
+
+## Chip Seq Libraries Control Metrics (W12)
+-Calculate FRIP scores with MACS2 output data
+-Generate quality metrics for a H3K36me3 histone modification ChIP-seq experiment from the ENCODE project.
+-Use Bioconductor ChIC package to evaluate library quality
