@@ -63,7 +63,12 @@ This folder contains the slurm scripts that were used in order to conduct the di
 - The SRA run accession number for the reads are: SRR7207011 is the Androgen Receptor (AR) ChIP from patient 1 tumor (P1_AR_DSG) SRR7207017 is the Androgen Receptor (AR) ChIP from patient 2 tumor (P2_AR_DSG) SRR7207089 is the “input” (P_Input_DSG)
 
 ## Chip Seq Libraries Control Metrics (W12)
--Calculate FRIP scores with MACS2 output data
--Generate quality metrics for a H3K36me3 histone modification ChIP-seq experiment from the ENCODE project.
--Use Bioconductor ChIC package to evaluate library quality
--To illustrate the use of the ChIC package, we will use toy control and sample H3K36me3 ChIP-seq BAMs from ENCODE.
+-Calculate FRIP scores with MACS2 output data <br>
+-Generate quality metrics for a H3K36me3 histone modification ChIP-seq experiment from the ENCODE project. <br>
+-Use Bioconductor ChIC package to evaluate library quality <br>
+-To illustrate the use of the ChIC package, we will use toy control and sample H3K36me3 ChIP-seq BAMs from ENCODE. <br>
+
+## k-mer profiling
+-conduct reference free k-mer profiling to estimate genome size, heterozygosity and repetitive DNA content from raw Illumina short read data using GenomeScope <br>
+-create k-mer profiles with Jellyfish <br>
+-estimate parameters of interest and generate plots <br>
