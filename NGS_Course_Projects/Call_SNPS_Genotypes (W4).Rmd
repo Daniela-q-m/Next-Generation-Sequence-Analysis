@@ -1,0 +1,244 @@
+---
+title: "Calling SNPs and Genotypes"
+output: html_notebook
+---
+
+The purposes of this notebooks are to:
+-Call snps and genotypes (with GenotypeGVCFs) from 30 samples from the 1000 Human Genomes Project
+-Apply a set of hard filters to the callset
+  -Align reads with BWA-MEM
+  -Coordinate-sort
+  -Mark PCR duplicates
+  -Base Quality Score Recalibration (BQSR)
+  -Run HaplotypeCaller to create .gvcf files
+  -Run CombineGVCFs
+  -Run GenotypeGVCFs
+  -Perform Variant Quality Score Recalibration
+  -Perform hard filtering of VCF
+  
+Make directory for week 4 and subdirectory for Task1. Check available module for GATK, it is gatk/4.2.4.1
+```{bash}
+[dq2033@cs066 ~]$ cd $SCRATCH
+[dq2033@cs066 dq2033]$ ls
+hg38  ngs.week1  ngs.week3
+[dq2033@cs066 dq2033]$ mkdir ngs.week4
+[dq2033@cs066 dq2033]$ ls
+hg38  ngs.week1  ngs.week3  ngs.week4
+[dq2033@cs066 dq2033]$ cd ngs.week4
+[dq2033@cs066 ngs.week4]$ ls
+[dq2033@cs066 ngs.week4]$ mkdir Task1
+[dq2033@cs066 ngs.week4]$ ls
+Task1
+[dq2033@cs066 ngs.week4]$ cp /scratch/work/courses/BI7653/hw1.2022/slurm_template.sh .
+[dq2033@cs066 ngs.week4]$ ls
+Task1  slurm_template.sh
+[dq2033@cs066 ngs.week4]$ module avail
+```
+
+Copy the reference genome fasta to Task 1 directory
+```{bash}
+[dq2033@cs066 ngs.week4]$ ls
+Homo_sapiens.GRCh38.dna_sm.primary_assembly.normalized.fa  slurm_template.sh
+Task1
+[dq2033@cs066 ngs.week4]$ pwd
+/scratch/dq2033/ngs.week4
+[dq2033@cs066 ngs.week4]$ mv Homo_sapiens.GRCh38.dna_sm.primary_assembly.normalized.fa /scratch/dq2033/ngs.week4/Task1
+[dq2033@cs066 ngs.week4]$ ls
+Task1  slurm_template.sh
+```
+
+Using slurm script and gatk call variants
+```{bash}
+#!/bin/bash
+# 
+#SBATCH --nodes=1
+#SBATCH --tasks-per-node=1
+#SBATCH --cpus-per-task=1
+#SBATCH --time=8:00:00
+#SBATCH --mem=10GB
+#SBATCH --job-name=slurm_template
+#SBATCH --mail-type=FAIL,END
+#SBATCH --mail-user=<dq2033@nyu.edu>
+
+module purge
+
+module load gatk/4.2.4.1
+
+gatk --java-options "-Xmx8g" GenotypeGVCFs \
+   -R /scratch/work/courses/BI7653/hw3.2022/hg38/Homo_sapiens.GRCh38.dna_sm.primary_assembly.normalized.fa \
+   -V /scratch/work/courses/BI7653/hw4.2022/cohort.g.vcf.gz \
+   -O outputweek4.vcf.gz \
+   --allow-old-rms-mapping-quality-annotation-data
+
+```
+
+Look at first 20 lines of the output gzipped vcf using
+```{r}
+##fileformat=VCFv4.2
+##ALT=<ID=NON_REF,Description="Represents any possible alternative allele at this location">
+##FILTER=<ID=LowQual,Description="Low quality">
+##FORMAT=<ID=AD,Number=R,Type=Integer,Description="Allelic depths for the ref and alt alleles in the order listed">
+##FORMAT=<ID=DP,Number=1,Type=Integer,Description="Approximate read depth (reads with MQ=255 or with bad mates are filtered)">
+##FORMAT=<ID=GQ,Number=1,Type=Integer,Description="Genotype Quality">
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##FORMAT=<ID=MIN_DP,Number=1,Type=Integer,Description="Minimum DP observed within the GVCF block">
+##FORMAT=<ID=PGT,Number=1,Type=String,Description="Physical phasing haplotype information, describing how the alternate alleles are phased in relation to one another">
+##FORMAT=<ID=PID,Number=1,Type=String,Description="Physical phasing ID information, where each unique ID within a given sample (but not across samples) connects records within a phasing group">
+##FORMAT=<ID=PL,Number=G,Type=Integer,Description="Normalized, Phred-scaled likelihoods for genotypes as defined in the VCF specification">
+##FORMAT=<ID=RGQ,Number=1,Type=Integer,Description="Unconditional reference genotype confidence, encoded as a phred quality -10*log10 p(genotype call is wrong)">
+##FORMAT=<ID=SB,Number=4,Type=Integer,Description="Per-sample component statistics which comprise the Fisher's Exact Test to detect strand bias.">
+##GATKCommandLine=<ID=CombineGVCFs,CommandLine="CombineGVCFs  --output cohort.intervals.g.vcf.gz --variant /scratch/courses/BI7653/hw4.2019/gvcfs.list --intervals 1:1-5000000 --intervals 2:1-5000000 --intervals 3:1-5000000 --reference /scratch/courses/BI7653/hw3.2019/hg38/Homo_sapiens.GRCh38.dna_sm.primary_assembly.normalized.fa  --annotation-group StandardAnnotation --disable-tool-default-annotations false --convert-to-base-pair-resolution false --break-bands-at-multiples-of 0 --ignore-variants-starting-outside-interval false --interval-set-rule UNION --interval-padding 0 --interval-exclusion-padding 0 --interval-merging-rule ALL --read-validation-stringency SILENT --seconds-between-progress-updates 10.0 --disable-sequence-dictionary-validation false --create-output-bam-index true --create-output-bam-md5 false --create-output-variant-index true --create-output-variant-md5 false --lenient false --add-output-sam-program-record true --add-output-vcf-command-line true --cloud-prefetch-buffer 40 --cloud-index-prefetch-buffer -1 --disable-bam-index-caching false --help false --version false --showHidden false --verbosity INFO --QUIET false --use-jdk-deflater false --use-jdk-inflater false --gcs-max-retries 20 --disable-tool-default-read-filters false",Version=4.0.2.1,Date="September 25, 2019 5:45:02 PM EDT">
+##GATKCommandLine=<ID=GenotypeGVCFs,CommandLine="GenotypeGVCFs --output outputweek4.vcf.gz --variant /scratch/work/courses/BI7653/hw4.2022/cohort.g.vcf.gz --reference /scratch/work/courses/BI7653/hw3.2022/hg38/Homo_sapiens.GRCh38.dna_sm.primary_assembly.normalized.fa --allow-old-rms-mapping-quality-annotation-data true --include-non-variant-sites false --merge-input-intervals false --input-is-somatic false --tumor-lod-to-emit 3.5 --allele-fraction-error 0.001 --keep-combined-raw-annotations false --use-posteriors-to-calculate-qual false --dont-use-dragstr-priors false --use-new-qual-calculator true --annotate-with-num-discovered-alleles false --heterozygosity 0.001 --indel-heterozygosity 1.25E-4 --heterozygosity-stdev 0.01 --standard-min-confidence-threshold-for-calling 30.0 --max-alternate-alleles 6 --max-genotype-count 1024 --sample-ploidy 2 --num-reference-samples-if-no-call 0 --genotype-assignment-method USE_PLS_TO_ASSIGN --call-genotypes false --genomicsdb-use-bcf-codec false --genomicsdb-shared-posixfs-optimizations false --genomicsdb-use-gcs-hdfs-connector false --only-output-calls-starting-in-intervals false --interval-set-rule UNION --interval-padding 0 --interval-exclusion-padding 0 --interval-merging-rule ALL --read-validation-stringency SILENT --seconds-between-progress-updates 10.0 --disable-sequence-dictionary-validation false --create-output-bam-index true --create-output-bam-md5 false --create-output-variant-index true --create-output-variant-md5 false --max-variants-per-shard 0 --lenient false --add-output-sam-program-record true --add-output-vcf-command-line true --cloud-prefetch-buffer 40 --cloud-index-prefetch-buffer -1 --disable-bam-index-caching false --sites-only-vcf-output false --help false --version false --showHidden false --verbosity INFO --QUIET false --use-jdk-deflater false --use-jdk-inflater false --gcs-max-retries 20 --gcs-project-for-requester-pays  --disable-tool-default-read-filters false --disable-tool-default-annotations false --enable-all-annotations false",Version="4.2.4.1",Date="February 20, 2022 11:05:04 AM EST">
+##GATKCommandLine=<ID=HaplotypeCaller,CommandLine="HaplotypeCaller  --emit-ref-confidence GVCF --output NA19098.g.vcf --input NA19098.sorted.markdups.bam --reference /scratch/courses/BI7653/hw3.2019/hg38/Homo_sapiens.GRCh38.dna_sm.primary_assembly.normalized.fa  --annotation-group StandardAnnotation --annotation-group StandardHCAnnotation --disable-tool-default-annotations false --gvcf-gq-bands 1 --gvcf-gq-bands 2 --gvcf-gq-bands 3 --gvcf-gq-bands 4 --gvcf-gq-bands 5 --gvcf-gq-bands 6 --gvcf-gq-bands 7 --gvcf-gq-bands 8 --gvcf-gq-bands 9 --gvcf-gq-bands 10 --gvcf-gq-bands 11 --gvcf-gq-bands 12 --gvcf-gq-bands 13 --gvcf-gq-bands 14 --gvcf-gq-bands 15 --gvcf-gq-bands 16 --gvcf-gq-bands 17 --gvcf-gq-bands 18 --gvcf-gq-bands 19 --gvcf-gq-bands 20 --gvcf-gq-bands 21 --gvcf-gq-bands 22 --gvcf-gq-bands 23 --gvcf-gq-bands 24 --gvcf-gq-bands 25 --gvcf-gq-bands 26 --gvcf-gq-bands 27 --gvcf-gq-bands 28 --gvcf-gq-bands 29 --gvcf-gq-bands 30 --gvcf-gq-bands 31 --gvcf-gq-bands 32 --gvcf-gq-bands 33 --gvcf-gq-bands 34 --gvcf-gq-bands 35 --gvcf-gq-bands 36 --gvcf-gq-bands 37 --gvcf-gq-bands 38 --gvcf-gq-bands 39 --gvcf-gq-bands 40 --gvcf-gq-bands 41 --gvcf-gq-bands 42 --gvcf-gq-bands 43 --gvcf-gq-bands 44 --gvcf-gq-bands 45 --gvcf-gq-bands 46 --gvcf-gq-bands 47 --gvcf-gq-bands 48 --gvcf-gq-bands 49 --gvcf-gq-bands 50 --gvcf-gq-bands 51 --gvcf-gq-bands 52 --gvcf-gq-bands 53 --gvcf-gq-bands 54 --gvcf-gq-bands 55 --gvcf-gq-bands 56 --gvcf-gq-bands 57 --gvcf-gq-bands 58 --gvcf-gq-bands 59 --gvcf-gq-bands 60 --gvcf-gq-bands 70 --gvcf-gq-bands 80 --gvcf-gq-bands 90 --gvcf-gq-bands 99 --indel-size-to-eliminate-in-ref-model 10 --use-alleles-trigger false --disable-optimizations false --just-determine-active-regions false --dont-genotype false --dont-trim-active-regions false --max-disc-ar-extension 25 --max-gga-ar-extension 300 --padding-around-indels 150 --padding-around-snps 20 --kmer-size 10 --kmer-size 25 --dont-increase-kmer-sizes-for-cycles false --allow-non-unique-kmers-in-ref false --num-pruning-samples 1 --recover-dangling-heads false --do-not-recover-dangling-branches false --min-dangling-branch-length 4 --consensus false --max-num-haplotypes-in-population 128 --error-correct-kmers false --min-pruning 2 --debug-graph-transformations false --kmer-length-for-read-error-correction 25 --min-observations-for-kmer-to-be-solid 20 --likelihood-calculation-engine PairHMM --base-quality-score-threshold 18 --pair-hmm-gap-continuation-penalty 10 --pair-hmm-implementation FASTEST_AVAILABLE --pcr-indel-model CONSERVATIVE --phred-scaled-global-read-mismapping-rate 45 --native-pair-hmm-threads 4 --native-pair-hmm-use-double-precision false --debug false --use-filtered-reads-for-annotations false --bam-writer-type CALLED_HAPLOTYPES --dont-use-soft-clipped-bases false --capture-assembly-failure-bam false --error-correct-reads false --do-not-run-physical-phasing false --min-base-quality-score 10 --smith-waterman JAVA --use-new-qual-calculator false --annotate-with-num-discovered-alleles false --heterozygosity 0.001 --indel-heterozygosity 1.25E-4 --heterozygosity-stdev 0.01 --standard-min-confidence-threshold-for-calling 10.0 --max-alternate-alleles 6 --max-genotype-count 1024 --sample-ploidy 2 --genotyping-mode DISCOVERY --contamination-fraction-to-filter 0.0 --output-mode EMIT_VARIANTS_ONLY --all-site-pls false --min-assembly-region-size 50 --max-assembly-region-size 300 --assembly-region-padding 100 --max-reads-per-alignment-start 50 --active-probability-threshold 0.002 --max-prob-propagation-distance 50 --interval-set-rule UNION --interval-padding 0 --interval-exclusion-padding 0 --interval-merging-rule ALL --read-validation-stringency SILENT --seconds-between-progress-updates 10.0 --disable-sequence-dictionary-validation false --create-output-bam-index true --create-output-bam-md5 false --create-output-variant-index true --create-output-variant-md5 false --lenient false --add-output-sam-program-record true --add-output-vcf-command-line true --cloud-prefetch-buffer 40 --cloud-index-prefetch-buffer -1 --disable-bam-index-caching false --help false --version false --showHidden false --verbosity INFO --QUIET false --use-jdk-deflater false --use-jdk-inflater false --gcs-max-retries 20 --disable-tool-default-read-filters false --minimum-mapping-quality 20",Version=4.0.2.1,Date="September 23, 2019 9:55:52 PM EDT">
+##INFO=<ID=AC,Number=A,Type=Integer,Description="Allele count in genotypes, for each ALT allele, in the same order as listed">
+##INFO=<ID=AF,Number=A,Type=Float,Description="Allele Frequency, for each ALT allele, in the same order as listed">
+##INFO=<ID=AN,Number=1,Type=Integer,Description="Total number of alleles in called genotypes">
+##INFO=<ID=BaseQRankSum,Number=1,Type=Float,Description="Z-score from Wilcoxon rank sum test of Alt Vs. Ref base qualities">
+```
+
+GenotypeGVCFs command will produce a VCF file with both indels and snps. You can use a grep command that excludes header lines beginning with a “#” and extract only variant records from a VCF. Look at number of variants in output VCF 
+```{bash}
+gunzip -c | grep -c -v '^#'
+```
+
+There are 91636 variant calls in the VCF.
+```{bash}
+[dq2033@log-2 ngs.week4]$ cd Task1
+[dq2033@log-2 Task1]$ ls
+Homo_sapiens.GRCh38.dna_sm.primary_assembly.normalized.fa  slurm-15089912.ou
+outputweek4.vcf.gz                                         slurm-15089912.out
+outputweek4.vcf.gz.tbi                                     week4slurm.sh
+[dq2033@log-2 Task1]$ gunzip -c outputweek4.vcf.gz   | grep -c -v '^#'
+91636
+```
+
+The HaplotypeCaller + CombineGVCFs + GenotypeGVCFs workflow addresses what is known as the n + 1 problem. The n+1 problem essentially is the issue of adding one more sample to the analysis and having to rerun all the other samples. Newer software allows you to simply add one more sample without having to spend time on intensive computation for all other samples.
+
+Create a new slurm script to select only snps from the VCF created in Task 1 using the SelectVariants command mentioned in the link with appropriate adjustments made to it so it will work on your data. To do this, copy the output file (VCF) into the same directory as the script to call SNPs on part 2. I also copy the index file because GATK needs the index together with the VCF. I then submit my job.
+
+```{bash}
+[dq2033@log-2 ngs.week4]$ ls
+Task1
+[dq2033@log-2 ngs.week4]$ mkdir Task2
+[dq2033@log-2 ngs.week4]$ ls
+Task1  Task2
+[dq2033@log-2 Task2]$ cp /scratch/dq2033/ngs.week4/Task1/outputweek4.vcf.gz .
+[dq2033@log-2 Task2]$ ls
+outputweek4.vcf.gz  week4slurmtask2.sh
+[dq2033@cs003 Task2]$ cp /scratch/dq2033/ngs.week4/Task1/outputweek4.vcf.gz.tbi  .
+[dq2033@cs003 Task2]$ ls
+outputweek4.vcf.gz  outputweek4.vcf.gz.tbi  week4slurmtask2.sh
+[dq2033@cs003 Task2]$ sbatch week4slurmtask2.sh
+Submitted batch job 15100073
+```
+
+Slurm script used eith selectvariants:
+```{bash}
+#!/bin/bash
+# 
+#SBATCH --nodes=1
+#SBATCH --tasks-per-node=1
+#SBATCH --cpus-per-task=1
+#SBATCH --time=8:00:00
+#SBATCH --mem=10GB
+#SBATCH --job-name=slurm_template
+#SBATCH --mail-type=FAIL,END
+#SBATCH --mail-user=<dq2033@nyu.edu>
+
+module purge
+
+module load gatk/4.2.4.1
+
+gatk SelectVariants \
+    -V outputweek4.vcf.gz \
+    -select-type SNP \
+    -O snps.vcf.gz
+
+```
+
+For each of Is the variant a SNP or indel? If it is an indel, is the reference or the alternate allele the deletion allele? If it is an indel, how many bases are deleted relative to the insertion allele? If it is an indel, for each allele, which base is found at the genomic position in the POS column 
+
+```{bash}
+#CHROM    POS   ID  REF ALT     QUAL  FILTER  INFO  <additional columns not shown>
+20        20    .   AT  A       .     PASS    DP=100
+20        10    .   C   G       .     PASS    DP=100
+20        20    .   C   CATATAT .     PASS    DP=100
+```
+
+The first one is a deletion from because the one T is missing from the alternate genome when compared to reference.
+
+The second one is an SNP. The reference genome has a C in this position and the alternate genome has a G.
+
+The third one is an insertion in the alternate genome. Reference does not include the six ATATAT seen in reference.
+
+Even when VQSR is conducted, the GATK still recommends eliminating outlier SNPs using hard filtering.For example, SNPs with very high or very low read depths (summed across samples) are often removed
+Here I move the files from task 2 directory to task 3 directory. I move both the VCF and the index file.
+
+```{bash}
+[dq2033@log-2 Task3]$ cp  /scratch/dq2033/ngs.week4/Task2/snps.vcf.gz .
+[dq2033@log-2 Task3]$ ls
+snps.vcf.gz  week4slurm.sh
+[dq2033@log-2 Task3]$ mv  week4slurm.sh week4slurmtask3.sh
+[dq2033@log-2 Task3]$ ls
+snps.vcf.gz  week4slurmtask3.sh
+[dq2033@log-2 Task3]$  cp  /scratch/dq2033/ngs.week4/Task2/snps.vcf.gz.tbi .
+[dq2033@log-2 Task3]$ ls
+snps.vcf.gz  snps.vcf.gz.tbi  week4slurmtask3.sh
+```
+
+Slurm script to filter variants:
+```{bash}
+#SBATCH --nodes=1
+#SBATCH --tasks-per-node=1
+#SBATCH --cpus-per-task=1
+#SBATCH --time=8:00:00
+#SBATCH --mem=10GB
+#SBATCH --job-name=slurm_template
+#SBATCH --mail-type=FAIL,END
+#SBATCH --mail-user=<dq2033@nyu.edu>
+
+module purge
+
+module load gatk/4.2.4.1 
+
+gatk VariantFiltration \
+    -V snps.vcf.gz \
+    -filter "QD < 2.0" --filter-name "QD2" \
+    -filter "QUAL < 30.0" --filter-name "QUAL30" \
+    -filter "SOR > 3.0" --filter-name "SOR3" \
+    -filter "FS > 60.0" --filter-name "FS60" \
+    -filter "MQ < 40.0" --filter-name "MQ40" \
+    -filter "MQRankSum < -12.5" --filter-name "MQRankSum-12.5" \
+    -filter "ReadPosRankSum < -8.0" --filter-name "ReadPosRankSum-8" \
+    -O snps_filtered.vcf.gz
+```
+
+Create a job submission script with the following command line to remove SNPs that failed the filter criteria from the VCF. Check number of snps in final filtered callset
+```{bash}
+#!/bin/bash
+# 
+#SBATCH --nodes=1
+#SBATCH --tasks-per-node=1
+#SBATCH --cpus-per-task=1
+#SBATCH --time=8:00:00
+#SBATCH --mem=10GB
+#SBATCH --job-name=slurm_template
+#SBATCH --mail-type=FAIL,END
+#SBATCH --mail-user=<dq2033@nyu.edu>
+
+module purge
+
+module load gatk/4.2.4.1
+
+gatk SelectVariants \
+-R /scratch/work/courses/BI7653/hw3.2022/hg38/Homo_sapiens.GRCh38.dna_sm.primary_assembly.normalized.fa \
+-V snps_filtered.vcf.gz \
+--exclude-filtered \
+-O failedcriteriasnps.vcf.gz
+```
+
+```{bash}
+[dq2033@cs006 Task3]$ gunzip -c failedcriteriasnps.vcf.gz | grep -c -v '^#'
+74265
+```
+There are 74265 SNPs in the final filtered callset
