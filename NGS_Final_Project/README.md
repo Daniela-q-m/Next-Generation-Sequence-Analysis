@@ -1,0 +1,11 @@
+# Final Project: Differential Gene Expression Analysis as a response to NRDE2-targeting siRNAs in MDA-MB-231 breast cancer cell lines
+
+### Introduction
+The goal of this analysis is to investigate the impact that nuclear RNAi defective-2 (NRDE2) transfection has on the overall gene expression of MDA-MB-231 breast cancer cell lines. MDA-MB-231 cells are rated ‘a suitable transfection host’ and were isolated from an adenocarcinoma patient. Because this study delivered the siRNA via transfection, this was a suitable cell line to use. NRDE2
+is known to work closely during the RNA splicing process but human function is not very well understood. The treated samples were transfected with a small interfering RNA to silence the NRDE2 gene. Treated samples were compared to control samples to see what kinds of genes were affected when NRDE2 is silenced. The goal of this analysis is to process the raw reads produced on the NextSeq5000 platform to obtain a set of differentially expressed genes that can relay more information about the effect that
+silencing NRDE2 has on gene expression.
+
+### Methods
+![Screen Shot 2022-05-30 at 11 40 39 AM](https://user-images.githubusercontent.com/90015489/171025350-765a8e5e-e288-48d5-ab0d-bd3b041d0d0b.png)
+
+In order to conduct this analysis the raw fastq files from the study SRP161520 were obtained from the European Nucleotide Archive (ENA) and were processed both on the NYU Greene HPC Cluster and using R with Rstudio as an IDE. The workflow that was used in order to process the files is summarized in Fig. 1. The single reads were trimmed fastp which automatically detects Illumina adapters, in this case, those used in the Illumina NextSeq500 platform. Given that the average length of the reads was about 75 bp, there was no need to change the parameter to ensure reads reached this length. Reads that were less than 15bp are aromatically removed by fastp. Additionally, because fastp automatically detects and trims the polyG sequence artifacts that are a result of the sequencing process, no specific argument was passed to fastp. As seen in the MULTIQC report, the average N content across the reads for all samples was marginal and there was no need to change the default parameter that removes reads with more than 5
