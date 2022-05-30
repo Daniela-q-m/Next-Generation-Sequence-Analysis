@@ -1,0 +1,794 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html><head></head><body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div>
+
+<div class="btn-group pull-right float-right">
+<span>Code</span> <span class="caret"></span>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a rel="noopener" href="#">Show All Code</a></li>
+<li><a rel="noopener" href="#">Hide All Code</a></li>
+<li class="divider"></li>
+<li><a rel="noopener" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Daniela_Quijano_Homework_12</h1>
+
+</div>
+
+
+
+<div class="section level2">
+<h2>MACS2 peaks and FRiP scores</h2>
+<p>###Q1.1a How many peaks were called by MACS2 for each of the two Androgren Receptor ChIP-Seq samples in your MACS2 outputs from last week?</p>
+<p>To count number of peaks, count the lines in the narrowpeak file. SRR7207011 has 1932 peaks SRR7207017 has 20931 peaks</p>
+
+
+
+<pre class="bash"><code>[dq2033@log-2 ngs.week11]$ wc -l SRR7207011_MACS_peaks.narrowPeak
+1932 SRR7207011_MACS_peaks.narrowPeak</code></pre>
+
+
+
+
+<pre class="bash"><code>[dq2033@log-2 ngs.week11]$ wc -l SRR7207017_MACS_peaks.narrowPeak
+20931 SRR7207017_MACS_peaks.narrowPeak</code></pre>
+
+
+
+<p>###Q1.1b</p>
+<p>The mean peak width for each sample is: SRR7207017 225 SRR7207011 333 The procedure used to find the mean peak width is below:</p>
+
+
+
+<pre class="r"><code>#Open narroe peak file as a dataframe and reassign the column names based on documentation
+SRR7207017_narrowPeak &lt;- as.data.frame(read.table(&quot;/Users/danielaquijano/Documents/NYU MASTERS/SPRING 2022/NGS Class/SRR7207017_MACS_peaks.narrowPeak&quot;,header = FALSE, sep=&quot;\t&quot;,stringsAsFactors=FALSE, quote=&quot;&quot;))</code></pre>
+
+
+
+
+<pre class="r"><code>column_fields&lt;-c(&#39;chrom&#39;,&#39;chromStart&#39;,&#39;chromEnd&#39;,&#39;name&#39;,&#39;score&#39;,&#39;strand&#39;,&#39;signalValue&#39;,&#39;pValue&#39;,&#39;qValue&#39;,&#39;peak&#39;)
+colnames(SRR7207017_narrowPeak)&lt;-column_fields
+head(SRR7207017_narrowPeak)</code></pre>
+
+
+<div>
+
+</div>
+
+
+
+
+<pre class="r"><code>SRR7207011_narrowPeak &lt;- as.data.frame(read.table(&quot;/Users/danielaquijano/Documents/NYU MASTERS/SPRING 2022/NGS Class/SRR7207011_MACS_peaks.narrowPeak&quot;,header = FALSE, sep=&quot;\t&quot;,stringsAsFactors=FALSE, quote=&quot;&quot;))
+colnames(SRR7207011_narrowPeak)&lt;-column_fields
+head(SRR7207011_narrowPeak)</code></pre>
+
+
+<div>
+
+</div>
+
+
+
+
+
+
+<pre class="r"><code>#Define a variable/column made by chromEnd-chromStart
+peak_width_SRR7207017&lt;-SRR7207017_narrowPeak$chromEnd-SRR7207017_narrowPeak$chromStart
+sum(peak_width_SRR7207017)/length(peak_width_SRR7207017)</code></pre>
+
+
+<pre><code>[1] 333.7633</code></pre>
+
+
+
+
+<pre class="r"><code>peak_width_SRR7207011&lt;-SRR7207011_narrowPeak$chromEnd-SRR7207011_narrowPeak$chromStart
+sum(peak_width_SRR7207011)/length(peak_width_SRR7207011)</code></pre>
+
+
+<pre><code>[1] 225.7769</code></pre>
+
+
+
+<p>###Q1.1c What is meant by the “signalValue” in column 7?</p>
+<p>From ENCODE documentation, column 7, signal value is a ‘Measurement of overall (usually, average) enrichment for the region.’</p>
+<p>###Q1.2 Report the FRiP score for each of the two androgen receptor ChIP-seq libraries and the command lines you used to generate your answer. Do the two androgen receptor libraries pass the 1% threshold typical of high quality ChIP-seq libraries? [ 2 points ].</p>
+<p>-wo Write the original A and B entries plus the number of base pairs of overlap between the two features. Only A features with overlap are reported. Restricted by -f and -r.</p>
+
+
+
+<pre class="bash"><code>[dq2033@log-2 ngs.week11]$ module load bedtools/intel/2.29.2 
+[dq2033@log-2 ngs.week11]$ bedtools intersect -a SRR7207011_MACS_peaks.narrowPeak -b SRR7207011_sorted.bam -wo &gt; peaks_intersect.bed</code></pre>
+
+
+
+
+<pre class="bash"><code>[dq2033@log-2 ngs.week11]$ head -3 peaks_intersect.bed 
+1   2255338 2255695 SRR7207011_MACS_peak_1  96  .   7.22475 14.21419.65410  119 1   2255300 2255365 SRR7207011.14194    60  +   27
+1   2255338 2255695 SRR7207011_MACS_peak_1  96  .   7.22475 14.21419.65410  119 1   2255306 2255371 SRR7207011.14195    60  +   33
+1   2255338 2255695 SRR7207011_MACS_peak_1  96  .   7.22475 14.21419.65410  119 1   2255316 2255381 SRR7207011.14196    60  +   43</code></pre>
+
+
+
+
+<pre class="bash"><code>[dq2033@log-1 ngs.week11]$ bedtools intersect -a SRR7207017_MACS_peaks.narrowPeak -b SRR7207089_sorted.bam -wo &gt; peaks_intersect_SRR7207017.bed</code></pre>
+
+
+
+
+<pre class="bash"><code>[dq2033@log-1 ngs.week11]$ head -2 peaks_intersect_SRR7207017.bed
+1   1433290 1433483 SRR7207017_MACS_peak_1  62  .   4.90366 9.252726.27751  141 1   1433345 1433410 SRR7207089.5959 60  -   65
+1   1433290 1433483 SRR7207017_MACS_peak_1  62  .   4.90366 9.252726.27751  141 1   1433406 1433471 SRR7207089.5960 60  -   65</code></pre>
+
+
+
+<p>Number intervals in the BAM file that intersect reads in the narrow peak file:</p>
+<p>SRR7207011</p>
+
+
+
+<pre class="bash"><code>[dq2033@log-2 ngs.week11]$ wc -l peaks_intersect.bed 
+64445 peaks_intersect.bed</code></pre>
+
+
+
+<p>SRR7207017</p>
+
+
+
+<pre class="bash"><code>[dq2033@log-1 ngs.week11]$ wc -l peaks_intersect_SRR7207017.bed
+89411 peaks_intersect_SRR7207017.bed</code></pre>
+
+
+
+<p>FRIP= number of reads overlapping called peaks divided by the total number of reads.</p>
+
+
+
+<pre class="bash"><code>[dq2033@log-1 ngs.week11]$ samtools flagstat SRR7207017_sorted.bam
+21498262 + 0 in total (QC-passed reads + QC-failed reads)
+21497944 + 0 primary
+318 + 0 secondary
+0 + 0 supplementary
+0 + 0 duplicates
+0 + 0 primary duplicates
+21497213 + 0 mapped (100.00% : N/A)
+21496895 + 0 primary mapped (100.00% : N/A)
+0 + 0 paired in sequencing
+0 + 0 read1
+0 + 0 read2
+0 + 0 properly paired (N/A : N/A)
+0 + 0 with itself and mate mapped
+0 + 0 singletons (N/A : N/A)
+0 + 0 with mate mapped to a different chr
+0 + 0 with mate mapped to a different chr (mapQ&gt;=5)</code></pre>
+
+
+
+
+
+
+<pre class="bash"><code>[dq2033@log-1 ngs.week11]$ samtools flagstat SRR7207011_sorted.bam
+23423985 + 0 in total (QC-passed reads + QC-failed reads)
+23423635 + 0 primary
+350 + 0 secondary
+0 + 0 supplementary
+0 + 0 duplicates
+0 + 0 primary duplicates
+23422740 + 0 mapped (99.99% : N/A)
+23422390 + 0 primary mapped (99.99% : N/A)
+0 + 0 paired in sequencing
+0 + 0 read1
+0 + 0 read2
+0 + 0 properly paired (N/A : N/A)
+0 + 0 with itself and mate mapped
+0 + 0 singletons (N/A : N/A)
+0 + 0 with mate mapped to a different chr
+0 + 0 with mate mapped to a different chr (mapQ&gt;=5)</code></pre>
+
+
+
+<p>I am using the total number of reads from each bam file obtained through samtools flagstat as seen above</p>
+<p>Frip scores: SRR7207011-&gt; 64445/23423985 = 0.0027 SRR7207017-&gt; 89411/21498262 = 0.00415</p>
+<p>Both of these scores do not pass the 1% Frip score guideline.</p>
+<p>According to Landt et. al: The 1% FRiP guideline works well when there are thousands to tens of thousands of called occupancy sites in a large mammalian genome. However, passing this threshold does not automatically mean that an experiment is successful and a FRiP below the threshold does not automatically mean failure.</p>
+</div>
+<div class="section level2">
+<h2>QC analysis of H3K36me3 ChIP-seq with the BioConductor ChIC package</h2>
+<p>Download BAM files,copy files onto local directory</p>
+
+
+
+<pre class="bash"><code>[dq2033@log-2 ngs.week11]$ cp /scratch/work/courses/BI7653/hw12.2022/ENCFF000BFX.bam .
+[dq2033@log-2 ngs.week11]$ cp /scratch/work/courses/BI7653/hw12.2022/ENCFF000BDQ.bam .</code></pre>
+
+
+
+<p>Download files from HPC to google drive</p>
+
+
+
+<pre class="bash"><code>[dq2033@log-2 ngs.week11]$ rclone copy /scratch/dq2033/ngs.week11/ENCFF000BDQ.bam mygoogledrive:hpc_uploads
+[dq2033@log-2 ngs.week11]$  rclone copy /scratch/dq2033/ngs.week11/ENCFF000BFX.bam mygoogledrive:hpc_uploads</code></pre>
+
+
+
+
+
+
+<pre class="r"><code>```r
+if (!require(\BiocManager\, quietly = TRUE))
+    install.packages(\BiocManager\)
+
+BiocManager::install(\ChIC\)</code></pre>
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+&lt;!-- rnb-chunk-end --&gt;
+
+
+&lt;!-- rnb-chunk-begin --&gt;
+
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShDaElDKVxuYGBgIn0= --&gt;
+
+```r
+library(ChIC)</code></pre>
+
+
+<pre><code>Loading required package: spp
+Loading required package: Rcpp
+Registered S3 method overwritten by &#39;data.table&#39;:
+  method           from
+  print.data.table     </code></pre>
+
+
+<pre class="r"><code>setwd(&quot;/Users/danielaquijano/Documents/NYU MASTERS/SPRING 2022/NGS Class/Week 12/chip_files&quot;)</code></pre>
+
+
+<pre><code>Warning: The working directory was changed to /Users/danielaquijano/Documents/NYU MASTERS/SPRING 2022/NGS Class/Week 12/chip_files inside a notebook chunk. The working directory will be reset when the chunk is finished running. Use the knitr root.dir option in the setup chunk to change the working directory for notebook chunks.</code></pre>
+
+
+
+
+
+
+<pre class="r"><code>chipName &lt;- &quot;ENCFF000BFX&quot;
+inputName &lt;- &quot;ENCFF000BDQ&quot;
+
+chipBam &lt;- readBamFile(&quot;/Users/danielaquijano/Documents/NYU MASTERS/SPRING 2022/NGS Class/Week 12/chip_files/ENCFF000BFX&quot;)</code></pre>
+
+
+<pre><code>9650808 reads from /Users/danielaquijano/Documents/NYU MASTERS/SPRING 2022/NGS Class/Week 12/chip_files/ENCFF000BFX</code></pre>
+
+
+<pre class="r"><code>inputBam &lt;- readBamFile(&quot;/Users/danielaquijano/Documents/NYU MASTERS/SPRING 2022/NGS Class/Week 12/chip_files/ENCFF000BDQ&quot;)</code></pre>
+
+
+<pre><code>9983747 reads from /Users/danielaquijano/Documents/NYU MASTERS/SPRING 2022/NGS Class/Week 12/chip_files/ENCFF000BDQ</code></pre>
+
+
+
+<p>Define variables to run the analysis with multiple threads</p>
+
+
+
+<pre class="r"><code>mc &lt;- 4
+cluster &lt;- parallel::makeCluster( mc )</code></pre>
+
+
+
+<p>Execute functions required for generating a cross-correlation profile plot. Cross-correlation profiling is a key method used by the ENCODE project to assess ChIP-seq library quality. The first steps to conducting cross-correlation profiling with ChIC is to determine binding peak separation distance and approximate window size that should be used for binding detection. Output variables are lists with information describing the cross-correlation profile. chip_binding.characteristics and input_binding.characteristics variables contain cross-correlation data required to construct the cross-correlation profile.</p>
+
+
+
+<pre class="r"><code>chip_binding.characteristics &lt;- get.binding.characteristics(
+    chipBam,
+    srange=c(0,500),
+    bin = 5,
+    accept.all.tags = TRUE,
+    cluster = cluster)
+input_binding.characteristics &lt;- get.binding.characteristics(
+  inputBam,
+  srange=c(0,500),
+  bin = 5,
+  accept.all.tags = TRUE,
+  cluster = cluster)
+parallel::stopCluster( cluster )
+</code></pre>
+
+
+
+<p>Using the output binding characteristics from above, we can calculate the cross correlation QC-metrics (e.g., NSC and RSC) that are used to measure signal-to-noise for the ChIP sample and generate the cross-correlation plot. Execution of the command below should create a pdf in your working directory called CrossCorrelation.pdf.</p>
+
+
+
+<pre class="r"><code>pdf(file = &quot;/Users/danielaquijano/Documents/NYU MASTERS/SPRING 2022/NGS Class/Homework/crosscorrelation_chipbam.pdf&quot;, width = 4, height = 4) 
+crossvalues_Chip &lt;- getCrossCorrelationScores( chipBam ,
+                                               chip_binding.characteristics,
+                                               read_length = 36,
+                                               annotationID=&quot;hg19&quot;,
+                                               savePlotPath = &quot;.&quot;,
+                                               mc = mc)</code></pre>
+
+
+<pre><code>
+hg19 valid annotation...
+load chrom_info
+
+(-) [=======&gt;-----------------------------------------]  17%
+Phantom peak and cross-correlation...
+
+(\) [===========&gt;-------------------------------------]  25%
+(|) [===============&gt;---------------------------------]  33%
+smoothing...
+Check strandshift...
+200
+strandshift not adjusted...
+
+(/) [===================&gt;-----------------------------]  42%
+Phantom peak with smoothing...
+Crosscorrelation plot saved under .
+plot cross correlation curve with smoothing
+pdf saved under./ChIPCrossCorrelation.pdf
+
+(-) [=======================&gt;-------------------------]  50%
+NRF calculation
+
+(\) [============================&gt;--------------------]  58%
+calculate alternative QC scores...
+
+(|) [================================&gt;----------------]  67%
+(/) [====================================&gt;------------]  75%
+(-) [========================================&gt;--------]  83%
+(\) [============================================&gt;----]  92%
+(|) [=================================================] 100%</code></pre>
+
+
+<pre class="r"><code>dev.off()</code></pre>
+
+
+<pre><code>null device 
+          1 </code></pre>
+
+
+
+
+<pre class="r"><code>class(crossvalues_Chip)</code></pre>
+
+
+<pre><code>[1] &quot;list&quot;</code></pre>
+
+
+<pre class="r"><code>crossvalues_Chip</code></pre>
+
+
+<pre><code>$CC_StrandShift
+[1] 200
+
+$tag.shift
+[1] 100
+
+$N1
+[1] 8697346
+
+$Nd
+[1] 9035245
+
+$CC_PBC
+[1] 0.963
+
+$CC_readLength
+[1] 36
+
+$CC_UNIQUE_TAGS_LibSizeadjusted
+[1] 5988037
+
+$CC_NSC
+[1] 1.447
+
+$CC_RSC
+[1] 1.079
+
+$CC_QualityFlag
+[1] 1
+
+$CC_shift
+[1] 200
+
+$CC_A
+[1] 0.229
+
+$CC_B
+[1] 0.224
+
+$CC_C
+[1] 0.158
+
+$CC_ALL_TAGS
+[1] 9420858
+
+$CC_UNIQUE_TAGS
+[1] 9035245
+
+$CC_UNIQUE_TAGS_nostrand
+[1] 8909432
+
+$CC_NRF
+[1] 0.959
+
+$CC_NRF_nostrand
+[1] 0.946
+
+$CC_NRF_LibSizeadjusted
+[1] 0.599</code></pre>
+
+
+
+<div class="section level3">
+<h3>Q2.1b Select all that are true statements about the cross-correlation profile:</h3>
+<p>aligned read asymmetries between DNA strands are the basis for the cross-correlation profile approach to ChIP-seq QC</p>
+<p>correlations between strand-specific depths are recalculated after performing a “strand shift”</p>
+<p>a single correlation is calculated between strand-specific depth</p>
+<p>NSC values above a pre-defined threshold are of acceptable quality for downstream analysis</p>
+</div>
+<div class="section level3">
+<h3>Q2.2a</h3>
+<p>The NSC value for the chip salmple is 1.447</p>
+</div>
+<div class="section level3">
+<h3>Q2.2b What is the RSC values for the ChIP sample?</h3>
+<p>The RSC (Relative Strand Cross Correlation) values for this chip sample is 1.079</p>
+</div>
+<div class="section level3">
+<h3>Q2.2c Do either of the metrics incorporate the “shaddow peak” height in how they are calculated? Which one(s)?</h3>
+<p>The RSC value takes into consideration the ratio of the difference from the CHIP peak and the background and the phantom peak and the bakcground.</p>
+</div>
+<div class="section level3">
+<h3>Q2.2d Landt et al.&#160;2012 (see “Cross-correlation Analysis”) provide minimum NSC and RSC values for libraries with acceptable signal-to-noise ratios. What are these minimum values and does this library pass ENCODE standards for quality control? Select one:</h3>
+<p>minimum NSC = 1.05, minimum RSC = 0.8, the library passes QC</p>
+
+
+
+<pre class="r"><code>crossvalues_input &lt;- getCrossCorrelationScores( inputBam,
+                                               input_binding.characteristics,
+                                               read_length = 36,
+                                               annotationID=&quot;hg19&quot;,
+                                               savePlotPath = &quot;.&quot;,
+                                               mc = mc)</code></pre>
+
+
+<pre><code>
+hg19 valid annotation...
+load chrom_info
+
+(-) [=======&gt;-----------------------------------------]  17%
+Phantom peak and cross-correlation...
+
+(\) [===========&gt;-------------------------------------]  25%
+(|) [===============&gt;---------------------------------]  33%
+smoothing...
+Check strandshift...
+140
+Strandshift is adjusted
+
+(/) [===================&gt;-----------------------------]  42%
+Phantom peak with smoothing...
+Crosscorrelation plot saved under .
+plot cross correlation curve with smoothing
+pdf saved under./ChIPCrossCorrelation.pdf
+
+(-) [=======================&gt;-------------------------]  50%
+NRF calculation
+
+(\) [============================&gt;--------------------]  58%
+calculate alternative QC scores...
+
+(|) [================================&gt;----------------]  67%
+(/) [====================================&gt;------------]  75%
+(-) [========================================&gt;--------]  83%
+(\) [============================================&gt;----]  92%
+(|) [=================================================] 100%</code></pre>
+
+
+
+
+<pre class="r"><code>class(crossvalues_input)</code></pre>
+
+
+<pre><code>[1] &quot;list&quot;</code></pre>
+
+
+<pre class="r"><code>crossvalues_input</code></pre>
+
+
+<pre><code>$CC_StrandShift
+[1] 140
+
+$tag.shift
+[1] 70
+
+$N1
+[1] 8725518
+
+$Nd
+[1] 9119345
+
+$CC_PBC
+[1] 0.957
+
+$CC_readLength
+[1] 36
+
+$CC_UNIQUE_TAGS_LibSizeadjusted
+[1] 5992248
+
+$CC_NSC
+[1] 1.04
+
+$CC_RSC
+[1] 0.214
+
+$CC_QualityFlag
+[1] -2
+
+$CC_shift
+[1] 100
+
+$CC_A
+[1] 0.127
+
+$CC_B
+[1] 0.145
+
+$CC_C
+[1] 0.122
+
+$CC_ALL_TAGS
+[1] 9606580
+
+$CC_UNIQUE_TAGS
+[1] 9119345
+
+$CC_UNIQUE_TAGS_nostrand
+[1] 9098023
+
+$CC_NRF
+[1] 0.949
+
+$CC_NRF_nostrand
+[1] 0.947
+
+$CC_NRF_LibSizeadjusted
+[1] 0.599</code></pre>
+
+
+
+</div>
+<div class="section level3">
+<h3>Q2.3a What steps are typically included/excluded in the preparation of the control/input sample? (see Week 11 pre-recorded video). Select all true statements.</h3>
+<p>chromatin immunoprecipation with an appropriate antibody</p>
+<p>With the input sample, a non specific pulldown is conducted sometimes with a mock IgG- Any IgG immunoprecipitated DNA should represent a random, nonspecific population.</p>
+</div>
+<div class="section level3">
+<h3>Q2.3b NSC/RSC values for input sample</h3>
+<p>1.04 NSC 0.214 RSC (due to low RSC value this would have failed QC)</p>
+<div class="figure">
+<img src="javascript://" alt=""/>
+<p class="caption">Fingerprint Plot</p>
+</div>
+<div class="figure">
+<img src="javascript://" alt=""/>
+<p class="caption">Fingerprint Plot</p>
+</div>
+</div>
+<div class="section level3">
+<h3>Q2.4. ChIC calculates “Global Metrics” for ChIP-seq quality control.</h3>
+<p>These metrics center around the fingerprint plot and nine metrics that can be derived from such plots</p>
+<p>To generate a fingerprint plot, we need to calculate smoothed tag (read) density distributions. First remove anomalies in the BAMs:</p>
+
+
+
+<pre class="r"><code>selectedTags &lt;- removeLocalTagAnomalies(chipBam,inputBam,chip_binding.characteristics)</code></pre>
+
+
+<pre><code>Filter tags
+SKIP select.informative.tags filter
+remove.local.tag.anomalies filter</code></pre>
+
+
+
+
+<pre class="r"><code>inputBamSelected &lt;- selectedTags$input.dataSelected
+chipBamSelected &lt;- selectedTags$chip.dataSelected</code></pre>
+
+
+
+<p>Extract the “tag shift” value from the cross-correlation output.</p>
+
+
+
+<pre class="r"><code>finalTagShift &lt;- crossvalues_Chip$tag.shift
+smoothedChip &lt;- tagDensity(chipBamSelected,
+                           annotationID = &quot;hg19&quot;,
+                           tag.shift = finalTagShift, mc = mc)</code></pre>
+
+
+<pre><code>
+hg19 valid annotation...
+load chrom_info
+load chrom_info
+Smooth tag density</code></pre>
+
+
+<pre class="r"><code>smoothedInput &lt;- tagDensity(inputBamSelected,
+                            annotationID = &quot;hg19&quot;,
+                           tag.shift = finalTagShift, mc = mc)</code></pre>
+
+
+<pre><code>
+hg19 valid annotation...
+load chrom_info
+load chrom_info
+Smooth tag density</code></pre>
+
+
+
+<p>Create a fingerprint plot and calculate global enrichment metrics</p>
+
+
+
+<pre class="r"><code>Ch_Results &lt;- qualityScores_GM(selectedTagsChip = chipBamSelected,
+                               selectedTagsInput = inputBamSelected,
+                               savePlotPath = &quot;.&quot;,
+                               tag.shift=finalTagShift,
+                               annotationID=&#39;hg19&#39;)</code></pre>
+
+
+<pre><code>***Calculating GM metrics...***
+
+hg19 valid annotation...
+load chrom_info
+load chrom_info
+Smooth tag density
+
+hg19 valid annotation...
+load chrom_info
+load chrom_info
+Smooth tag density
+shorten frame...
+
+(-) [===================&gt;-----------------------------]  40%
+Calculate GM for ChIP ...
+
+(\) [============================&gt;--------------------]  60%
+Calculate GM for Input ...
+
+(|) [======================================&gt;----------]  80%pdf saved under .
+
+(/) [=================================================] 100%
+Calculation of GM metrics done!</code></pre>
+
+
+
+<p>The fingerprint plot produced:</p>
+<p><img src="javascript://" alt="Fingerprint Plot"/> ### Fingerprint plot interpretation</p>
+<p>the ChIP sample is higher quality because a greater proportion of reads are in higher ranked bins (i.e., bins ranked by depth) than the input NOTE: The chip library is also more complex than the input since it is farther away from the diagnoal. A uniform library would be mapped closer to the diagonal.</p>
+<p>A common way of evaluating quality of ChIP-seq data and gaining biological insight into transcription factors or histone marks is to create a profile, or “enrichment” plot. A common type of plot in this category is the Transcription Start Site (TSS) profile plot which is described in the ChIC vignette categorized as a “Local Enrichment Metric (LM)”.</p>
+<p>A TSS profile plot for the sample and control BAMs:</p>
+<div class="figure">
+<img src="javascript://" alt=""/>
+<p class="caption">TSS Plot</p>
+</div>
+</div>
+<div class="section level3">
+<h3>Q2.5.</h3>
+<p>What is shown in the TSS plot? Please provide a detailed interpretation of the plot. Based on the TSS profile plot, describe where are H3K36me3 modifications typically located relative to protein coding genes. Enrichment should increase to a single peak near TSS. In this case, the average depth around the transcription start site peaks at around 400 and 100 bases around the transcription start site-these locations correspond to the location of H3K6me3 modifications.</p>
+
+</div>
+</div>
+
+<div>LS0tCnRpdGxlOiAiRGFuaWVsYV9RdWlqYW5vX0hvbWV3b3JrXzEyIgpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sKLS0tCgojIyBNQUNTMiBwZWFrcyBhbmQgRlJpUCBzY29yZXMKCiMjI1ExLjFhCkhvdyBtYW55IHBlYWtzIHdlcmUgY2FsbGVkIGJ5IE1BQ1MyIGZvciBlYWNoIG9mIHRoZSB0d28gQW5kcm9ncmVuIFJlY2VwdG9yIENoSVAtU2VxIHNhbXBsZXMgaW4geW91ciBNQUNTMiBvdXRwdXRzIGZyb20gbGFzdCB3ZWVrPwoKVG8gY291bnQgbnVtYmVyIG9mIHBlYWtzLCBjb3VudCB0aGUgbGluZXMgaW4gdGhlIG5hcnJvd3BlYWsgZmlsZS4KU1JSNzIwNzAxMSBoYXMgMTkzMiBwZWFrcwpTUlI3MjA3MDE3IGhhcyAyMDkzMSBwZWFrcwpgYGB7YmFzaH0KW2RxMjAzM0Bsb2ctMiBuZ3Mud2VlazExXSQgd2MgLWwgU1JSNzIwNzAxMV9NQUNTX3BlYWtzLm5hcnJvd1BlYWsKMTkzMiBTUlI3MjA3MDExX01BQ1NfcGVha3MubmFycm93UGVhawpgYGAKYGBge2Jhc2h9CltkcTIwMzNAbG9nLTIgbmdzLndlZWsxMV0kIHdjIC1sIFNSUjcyMDcwMTdfTUFDU19wZWFrcy5uYXJyb3dQZWFrCjIwOTMxIFNSUjcyMDcwMTdfTUFDU19wZWFrcy5uYXJyb3dQZWFrCmBgYAoKCiMjI1ExLjFiIAoKClRoZSBtZWFuIHBlYWsgd2lkdGggZm9yIGVhY2ggc2FtcGxlIGlzOgpTUlI3MjA3MDE3IDIyNQpTUlI3MjA3MDExIDMzMwpUaGUgcHJvY2VkdXJlIHVzZWQgdG8gZmluZCB0aGUgbWVhbiBwZWFrIHdpZHRoIGlzIGJlbG93OgoKYGBge3J9CiNPcGVuIG5hcnJvZSBwZWFrIGZpbGUgYXMgYSBkYXRhZnJhbWUgYW5kIHJlYXNzaWduIHRoZSBjb2x1bW4gbmFtZXMgYmFzZWQgb24gZG9jdW1lbnRhdGlvbgpTUlI3MjA3MDE3X25hcnJvd1BlYWsgPC0gYXMuZGF0YS5mcmFtZShyZWFkLnRhYmxlKCIvVXNlcnMvZGFuaWVsYXF1aWphbm8vRG9jdW1lbnRzL05ZVSBNQVNURVJTL1NQUklORyAyMDIyL05HUyBDbGFzcy9TUlI3MjA3MDE3X01BQ1NfcGVha3MubmFycm93UGVhayIsaGVhZGVyID0gRkFMU0UsIHNlcD0iXHQiLHN0cmluZ3NBc0ZhY3RvcnM9RkFMU0UsIHF1b3RlPSIiKSkKYGBgCmBgYHtyfQpjb2x1bW5fZmllbGRzPC1jKCdjaHJvbScsJ2Nocm9tU3RhcnQnLCdjaHJvbUVuZCcsJ25hbWUnLCdzY29yZScsJ3N0cmFuZCcsJ3NpZ25hbFZhbHVlJywncFZhbHVlJywncVZhbHVlJywncGVhaycpCmNvbG5hbWVzKFNSUjcyMDcwMTdfbmFycm93UGVhayk8LWNvbHVtbl9maWVsZHMKaGVhZChTUlI3MjA3MDE3X25hcnJvd1BlYWspCmBgYApgYGB7cn0KU1JSNzIwNzAxMV9uYXJyb3dQZWFrIDwtIGFzLmRhdGEuZnJhbWUocmVhZC50YWJsZSgiL1VzZXJzL2RhbmllbGFxdWlqYW5vL0RvY3VtZW50cy9OWVUgTUFTVEVSUy9TUFJJTkcgMjAyMi9OR1MgQ2xhc3MvU1JSNzIwNzAxMV9NQUNTX3BlYWtzLm5hcnJvd1BlYWsiLGhlYWRlciA9IEZBTFNFLCBzZXA9Ilx0IixzdHJpbmdzQXNGYWN0b3JzPUZBTFNFLCBxdW90ZT0iIikpCmNvbG5hbWVzKFNSUjcyMDcwMTFfbmFycm93UGVhayk8LWNvbHVtbl9maWVsZHMKaGVhZChTUlI3MjA3MDExX25hcnJvd1BlYWspCmBgYAoKYGBge3J9CiNEZWZpbmUgYSB2YXJpYWJsZS9jb2x1bW4gbWFkZSBieSBjaHJvbUVuZC1jaHJvbVN0YXJ0CnBlYWtfd2lkdGhfU1JSNzIwNzAxNzwtU1JSNzIwNzAxN19uYXJyb3dQZWFrJGNocm9tRW5kLVNSUjcyMDcwMTdfbmFycm93UGVhayRjaHJvbVN0YXJ0CnN1bShwZWFrX3dpZHRoX1NSUjcyMDcwMTcpL2xlbmd0aChwZWFrX3dpZHRoX1NSUjcyMDcwMTcpCmBgYApgYGB7cn0KcGVha193aWR0aF9TUlI3MjA3MDExPC1TUlI3MjA3MDExX25hcnJvd1BlYWskY2hyb21FbmQtU1JSNzIwNzAxMV9uYXJyb3dQZWFrJGNocm9tU3RhcnQKc3VtKHBlYWtfd2lkdGhfU1JSNzIwNzAxMSkvbGVuZ3RoKHBlYWtfd2lkdGhfU1JSNzIwNzAxMSkKYGBgCgojIyNRMS4xYwpXaGF0IGlzIG1lYW50IGJ5IHRoZSDigJxzaWduYWxWYWx1ZeKAnSBpbiBjb2x1bW4gNz8KCkZyb20gRU5DT0RFIGRvY3VtZW50YXRpb24sIGNvbHVtbiA3LCBzaWduYWwgdmFsdWUgaXMgYSAnTWVhc3VyZW1lbnQgb2Ygb3ZlcmFsbCAodXN1YWxseSwgYXZlcmFnZSkgZW5yaWNobWVudCBmb3IgdGhlIHJlZ2lvbi4nCgojIyNRMS4yClJlcG9ydCB0aGUgRlJpUCBzY29yZSBmb3IgZWFjaCBvZiB0aGUgdHdvIGFuZHJvZ2VuIHJlY2VwdG9yIENoSVAtc2VxIGxpYnJhcmllcyBhbmQgdGhlIGNvbW1hbmQgbGluZXMgeW91IHVzZWQgdG8gZ2VuZXJhdGUgeW91ciBhbnN3ZXIuIERvIHRoZSB0d28gYW5kcm9nZW4gcmVjZXB0b3IgbGlicmFyaWVzIHBhc3MgdGhlIDElIHRocmVzaG9sZCB0eXBpY2FsIG9mIGhpZ2ggcXVhbGl0eSBDaElQLXNlcSBsaWJyYXJpZXM/IFsgMiBwb2ludHMgXS4KCgotd28JV3JpdGUgdGhlIG9yaWdpbmFsIEEgYW5kIEIgZW50cmllcyBwbHVzIHRoZSBudW1iZXIgb2YgYmFzZSBwYWlycyBvZiBvdmVybGFwIGJldHdlZW4gdGhlIHR3byBmZWF0dXJlcy4gT25seSBBIGZlYXR1cmVzIHdpdGggb3ZlcmxhcCBhcmUgcmVwb3J0ZWQuIFJlc3RyaWN0ZWQgYnkgLWYgYW5kIC1yLgoKCmBgYHtiYXNofQpbZHEyMDMzQGxvZy0yIG5ncy53ZWVrMTFdJCBtb2R1bGUgbG9hZCBiZWR0b29scy9pbnRlbC8yLjI5LjIgCltkcTIwMzNAbG9nLTIgbmdzLndlZWsxMV0kIGJlZHRvb2xzIGludGVyc2VjdCAtYSBTUlI3MjA3MDExX01BQ1NfcGVha3MubmFycm93UGVhayAtYiBTUlI3MjA3MDExX3NvcnRlZC5iYW0gLXdvID4gcGVha3NfaW50ZXJzZWN0LmJlZApgYGAKYGBge2Jhc2h9CltkcTIwMzNAbG9nLTIgbmdzLndlZWsxMV0kIGhlYWQgLTMgcGVha3NfaW50ZXJzZWN0LmJlZCAKMQkyMjU1MzM4CTIyNTU2OTUJU1JSNzIwNzAxMV9NQUNTX3BlYWtfMQk5NgkuCTcuMjI0NzUJMTQuMjE0MTkuNjU0MTAJMTE5CTEJMjI1NTMwMAkyMjU1MzY1CVNSUjcyMDcwMTEuMTQxOTQJNjAJKwkyNwoxCTIyNTUzMzgJMjI1NTY5NQlTUlI3MjA3MDExX01BQ1NfcGVha18xCTk2CS4JNy4yMjQ3NQkxNC4yMTQxOS42NTQxMAkxMTkJMQkyMjU1MzA2CTIyNTUzNzEJU1JSNzIwNzAxMS4xNDE5NQk2MAkrCTMzCjEJMjI1NTMzOAkyMjU1Njk1CVNSUjcyMDcwMTFfTUFDU19wZWFrXzEJOTYJLgk3LjIyNDc1CTE0LjIxNDE5LjY1NDEwCTExOQkxCTIyNTUzMTYJMjI1NTM4MQlTUlI3MjA3MDExLjE0MTk2CTYwCSsJNDMKYGBgCmBgYHtiYXNofQpbZHEyMDMzQGxvZy0xIG5ncy53ZWVrMTFdJCBiZWR0b29scyBpbnRlcnNlY3QgLWEgU1JSNzIwNzAxN19NQUNTX3BlYWtzLm5hcnJvd1BlYWsgLWIgU1JSNzIwNzA4OV9zb3J0ZWQuYmFtIC13byA+IHBlYWtzX2ludGVyc2VjdF9TUlI3MjA3MDE3LmJlZApgYGAKYGBge2Jhc2h9CltkcTIwMzNAbG9nLTEgbmdzLndlZWsxMV0kIGhlYWQgLTIgcGVha3NfaW50ZXJzZWN0X1NSUjcyMDcwMTcuYmVkCjEJMTQzMzI5MAkxNDMzNDgzCVNSUjcyMDcwMTdfTUFDU19wZWFrXzEJNjIJLgk0LjkwMzY2CTkuMjUyNzI2LjI3NzUxCTE0MQkxCTE0MzMzNDUJMTQzMzQxMAlTUlI3MjA3MDg5LjU5NTkJNjAJLQk2NQoxCTE0MzMyOTAJMTQzMzQ4MwlTUlI3MjA3MDE3X01BQ1NfcGVha18xCTYyCS4JNC45MDM2Ngk5LjI1MjcyNi4yNzc1MQkxNDEJMQkxNDMzNDA2CTE0MzM0NzEJU1JSNzIwNzA4OS41OTYwCTYwCS0JNjUKYGBgCgoKCk51bWJlciBpbnRlcnZhbHMgaW4gdGhlIEJBTSBmaWxlIHRoYXQgaW50ZXJzZWN0IHJlYWRzIGluIHRoZSBuYXJyb3cgcGVhayBmaWxlOgoKU1JSNzIwNzAxMQpgYGB7YmFzaH0KW2RxMjAzM0Bsb2ctMiBuZ3Mud2VlazExXSQgd2MgLWwgcGVha3NfaW50ZXJzZWN0LmJlZCAKNjQ0NDUgcGVha3NfaW50ZXJzZWN0LmJlZApgYGAKClNSUjcyMDcwMTcKYGBge2Jhc2h9CltkcTIwMzNAbG9nLTEgbmdzLndlZWsxMV0kIHdjIC1sIHBlYWtzX2ludGVyc2VjdF9TUlI3MjA3MDE3LmJlZAo4OTQxMSBwZWFrc19pbnRlcnNlY3RfU1JSNzIwNzAxNy5iZWQKYGBgCgpGUklQPSBudW1iZXIgb2YgcmVhZHMgb3ZlcmxhcHBpbmcgY2FsbGVkIHBlYWtzIGRpdmlkZWQgYnkgdGhlIHRvdGFsIG51bWJlciBvZiByZWFkcy4KYGBge2Jhc2h9CltkcTIwMzNAbG9nLTEgbmdzLndlZWsxMV0kIHNhbXRvb2xzIGZsYWdzdGF0IFNSUjcyMDcwMTdfc29ydGVkLmJhbQoyMTQ5ODI2MiArIDAgaW4gdG90YWwgKFFDLXBhc3NlZCByZWFkcyArIFFDLWZhaWxlZCByZWFkcykKMjE0OTc5NDQgKyAwIHByaW1hcnkKMzE4ICsgMCBzZWNvbmRhcnkKMCArIDAgc3VwcGxlbWVudGFyeQowICsgMCBkdXBsaWNhdGVzCjAgKyAwIHByaW1hcnkgZHVwbGljYXRlcwoyMTQ5NzIxMyArIDAgbWFwcGVkICgxMDAuMDAlIDogTi9BKQoyMTQ5Njg5NSArIDAgcHJpbWFyeSBtYXBwZWQgKDEwMC4wMCUgOiBOL0EpCjAgKyAwIHBhaXJlZCBpbiBzZXF1ZW5jaW5nCjAgKyAwIHJlYWQxCjAgKyAwIHJlYWQyCjAgKyAwIHByb3Blcmx5IHBhaXJlZCAoTi9BIDogTi9BKQowICsgMCB3aXRoIGl0c2VsZiBhbmQgbWF0ZSBtYXBwZWQKMCArIDAgc2luZ2xldG9ucyAoTi9BIDogTi9BKQowICsgMCB3aXRoIG1hdGUgbWFwcGVkIHRvIGEgZGlmZmVyZW50IGNocgowICsgMCB3aXRoIG1hdGUgbWFwcGVkIHRvIGEgZGlmZmVyZW50IGNociAobWFwUT49NSkKYGBgCgpgYGB7YmFzaH0KW2RxMjAzM0Bsb2ctMSBuZ3Mud2VlazExXSQgc2FtdG9vbHMgZmxhZ3N0YXQgU1JSNzIwNzAxMV9zb3J0ZWQuYmFtCjIzNDIzOTg1ICsgMCBpbiB0b3RhbCAoUUMtcGFzc2VkIHJlYWRzICsgUUMtZmFpbGVkIHJlYWRzKQoyMzQyMzYzNSArIDAgcHJpbWFyeQozNTAgKyAwIHNlY29uZGFyeQowICsgMCBzdXBwbGVtZW50YXJ5CjAgKyAwIGR1cGxpY2F0ZXMKMCArIDAgcHJpbWFyeSBkdXBsaWNhdGVzCjIzNDIyNzQwICsgMCBtYXBwZWQgKDk5Ljk5JSA6IE4vQSkKMjM0MjIzOTAgKyAwIHByaW1hcnkgbWFwcGVkICg5OS45OSUgOiBOL0EpCjAgKyAwIHBhaXJlZCBpbiBzZXF1ZW5jaW5nCjAgKyAwIHJlYWQxCjAgKyAwIHJlYWQyCjAgKyAwIHByb3Blcmx5IHBhaXJlZCAoTi9BIDogTi9BKQowICsgMCB3aXRoIGl0c2VsZiBhbmQgbWF0ZSBtYXBwZWQKMCArIDAgc2luZ2xldG9ucyAoTi9BIDogTi9BKQowICsgMCB3aXRoIG1hdGUgbWFwcGVkIHRvIGEgZGlmZmVyZW50IGNocgowICsgMCB3aXRoIG1hdGUgbWFwcGVkIHRvIGEgZGlmZmVyZW50IGNociAobWFwUT49NSkKYGBgCgpJIGFtIHVzaW5nIHRoZSB0b3RhbCBudW1iZXIgb2YgcmVhZHMgZnJvbSBlYWNoIGJhbSBmaWxlIG9idGFpbmVkIHRocm91Z2ggc2FtdG9vbHMgZmxhZ3N0YXQgYXMgc2VlbiBhYm92ZSAKCkZyaXAgc2NvcmVzOgpTUlI3MjA3MDExLT4gNjQ0NDUvMjM0MjM5ODUgPSAwLjAwMjcKU1JSNzIwNzAxNy0+IDg5NDExLzIxNDk4MjYyID0gMC4wMDQxNQoKQm90aCBvZiB0aGVzZSBzY29yZXMgZG8gbm90IHBhc3MgdGhlIDElIEZyaXAgc2NvcmUgZ3VpZGVsaW5lLiAKCkFjY29yZGluZyB0byBMYW5kdCBldC4gYWw6IFRoZSAxJSBGUmlQIGd1aWRlbGluZSB3b3JrcyB3ZWxsIHdoZW4gdGhlcmUgYXJlIHRob3VzYW5kcwp0byB0ZW5zIG9mIHRob3VzYW5kcyBvZiBjYWxsZWQgb2NjdXBhbmN5IHNpdGVzIGluIGEgbGFyZ2UgbWFtbWFsaWFuCmdlbm9tZS4gSG93ZXZlciwgcGFzc2luZyB0aGlzIHRocmVzaG9sZCBkb2VzIG5vdCBhdXRvbWF0aWNhbGx5Cm1lYW4gdGhhdCBhbiBleHBlcmltZW50IGlzIHN1Y2Nlc3NmdWwgYW5kIGEgRlJpUCBiZWxvdyB0aGUgdGhyZXNob2xkCmRvZXMgbm90IGF1dG9tYXRpY2FsbHkgbWVhbiBmYWlsdXJlLgoKIyMgIFFDIGFuYWx5c2lzIG9mIEgzSzM2bWUzIENoSVAtc2VxIHdpdGggdGhlIEJpb0NvbmR1Y3RvciBDaElDIHBhY2thZ2UKCkRvd25sb2FkIEJBTSBmaWxlcyxjb3B5IGZpbGVzIG9udG8gbG9jYWwgZGlyZWN0b3J5CmBgYHtiYXNofQpbZHEyMDMzQGxvZy0yIG5ncy53ZWVrMTFdJCBjcCAvc2NyYXRjaC93b3JrL2NvdXJzZXMvQkk3NjUzL2h3MTIuMjAyMi9FTkNGRjAwMEJGWC5iYW0gLgpbZHEyMDMzQGxvZy0yIG5ncy53ZWVrMTFdJCBjcCAvc2NyYXRjaC93b3JrL2NvdXJzZXMvQkk3NjUzL2h3MTIuMjAyMi9FTkNGRjAwMEJEUS5iYW0gLgpgYGAKRG93bmxvYWQgZmlsZXMgZnJvbSBIUEMgdG8gZ29vZ2xlIGRyaXZlCmBgYHtiYXNofQpbZHEyMDMzQGxvZy0yIG5ncy53ZWVrMTFdJCByY2xvbmUgY29weSAvc2NyYXRjaC9kcTIwMzMvbmdzLndlZWsxMS9FTkNGRjAwMEJEUS5iYW0gbXlnb29nbGVkcml2ZTpocGNfdXBsb2FkcwpbZHEyMDMzQGxvZy0yIG5ncy53ZWVrMTFdJCAgcmNsb25lIGNvcHkgL3NjcmF0Y2gvZHEyMDMzL25ncy53ZWVrMTEvRU5DRkYwMDBCRlguYmFtIG15Z29vZ2xlZHJpdmU6aHBjX3VwbG9hZHMKYGBgCgpgYGB7cn0KaWYgKCFyZXF1aXJlKCJCaW9jTWFuYWdlciIsIHF1aWV0bHkgPSBUUlVFKSkKICAgIGluc3RhbGwucGFja2FnZXMoIkJpb2NNYW5hZ2VyIikKCkJpb2NNYW5hZ2VyOjppbnN0YWxsKCJDaElDIikKYGBgCmBgYHtyfQpsaWJyYXJ5KENoSUMpCnNldHdkKCIvVXNlcnMvZGFuaWVsYXF1aWphbm8vRG9jdW1lbnRzL05ZVSBNQVNURVJTL1NQUklORyAyMDIyL05HUyBDbGFzcy9XZWVrIDEyL2NoaXBfZmlsZXMiKQpgYGAKCmBgYHtyfQpjaGlwTmFtZSA8LSAiRU5DRkYwMDBCRlgiCmlucHV0TmFtZSA8LSAiRU5DRkYwMDBCRFEiCgpjaGlwQmFtIDwtIHJlYWRCYW1GaWxlKCIvVXNlcnMvZGFuaWVsYXF1aWphbm8vRG9jdW1lbnRzL05ZVSBNQVNURVJTL1NQUklORyAyMDIyL05HUyBDbGFzcy9XZWVrIDEyL2NoaXBfZmlsZXMvRU5DRkYwMDBCRlgiKQppbnB1dEJhbSA8LSByZWFkQmFtRmlsZSgiL1VzZXJzL2RhbmllbGFxdWlqYW5vL0RvY3VtZW50cy9OWVUgTUFTVEVSUy9TUFJJTkcgMjAyMi9OR1MgQ2xhc3MvV2VlayAxMi9jaGlwX2ZpbGVzL0VOQ0ZGMDAwQkRRIikKYGBgCgpEZWZpbmUgdmFyaWFibGVzIHRvIHJ1biB0aGUgYW5hbHlzaXMgd2l0aCBtdWx0aXBsZSB0aHJlYWRzCmBgYHtyfQptYyA8LSA0CmNsdXN0ZXIgPC0gcGFyYWxsZWw6Om1ha2VDbHVzdGVyKCBtYyApCmBgYApFeGVjdXRlIGZ1bmN0aW9ucyByZXF1aXJlZCBmb3IgZ2VuZXJhdGluZyBhIGNyb3NzLWNvcnJlbGF0aW9uIHByb2ZpbGUgcGxvdC4gCkNyb3NzLWNvcnJlbGF0aW9uIHByb2ZpbGluZyBpcyBhIGtleSBtZXRob2QgdXNlZCBieSB0aGUgRU5DT0RFIHByb2plY3QgdG8gYXNzZXNzIENoSVAtc2VxIGxpYnJhcnkgcXVhbGl0eS4gClRoZSBmaXJzdCBzdGVwcyB0byBjb25kdWN0aW5nIGNyb3NzLWNvcnJlbGF0aW9uIHByb2ZpbGluZyB3aXRoIENoSUMgaXMgdG8gZGV0ZXJtaW5lIGJpbmRpbmcgcGVhayBzZXBhcmF0aW9uIGRpc3RhbmNlIGFuZCBhcHByb3hpbWF0ZSB3aW5kb3cgc2l6ZSB0aGF0IHNob3VsZCBiZSB1c2VkIGZvciBiaW5kaW5nIGRldGVjdGlvbi4KT3V0cHV0IHZhcmlhYmxlcyBhcmUgbGlzdHMgd2l0aCBpbmZvcm1hdGlvbiBkZXNjcmliaW5nIHRoZSBjcm9zcy1jb3JyZWxhdGlvbiBwcm9maWxlLgpjaGlwX2JpbmRpbmcuY2hhcmFjdGVyaXN0aWNzIGFuZCBpbnB1dF9iaW5kaW5nLmNoYXJhY3RlcmlzdGljcyB2YXJpYWJsZXMgY29udGFpbiBjcm9zcy1jb3JyZWxhdGlvbiBkYXRhIHJlcXVpcmVkIHRvIGNvbnN0cnVjdCB0aGUgY3Jvc3MtY29ycmVsYXRpb24gcHJvZmlsZS4KYGBge3J9CmNoaXBfYmluZGluZy5jaGFyYWN0ZXJpc3RpY3MgPC0gZ2V0LmJpbmRpbmcuY2hhcmFjdGVyaXN0aWNzKAogICAgY2hpcEJhbSwKICAgIHNyYW5nZT1jKDAsNTAwKSwKICAgIGJpbiA9IDUsCiAgICBhY2NlcHQuYWxsLnRhZ3MgPSBUUlVFLAogICAgY2x1c3RlciA9IGNsdXN0ZXIpCmlucHV0X2JpbmRpbmcuY2hhcmFjdGVyaXN0aWNzIDwtIGdldC5iaW5kaW5nLmNoYXJhY3RlcmlzdGljcygKICBpbnB1dEJhbSwKICBzcmFuZ2U9YygwLDUwMCksCiAgYmluID0gNSwKICBhY2NlcHQuYWxsLnRhZ3MgPSBUUlVFLAogIGNsdXN0ZXIgPSBjbHVzdGVyKQpwYXJhbGxlbDo6c3RvcENsdXN0ZXIoIGNsdXN0ZXIgKQoKYGBgCgoKVXNpbmcgdGhlIG91dHB1dCBiaW5kaW5nIGNoYXJhY3RlcmlzdGljcyBmcm9tIGFib3ZlLCB3ZSBjYW4gY2FsY3VsYXRlIHRoZSBjcm9zcyBjb3JyZWxhdGlvbiBRQy1tZXRyaWNzIChlLmcuLCBOU0MgYW5kIFJTQykgdGhhdCBhcmUgdXNlZCB0byBtZWFzdXJlIHNpZ25hbC10by1ub2lzZSBmb3IgdGhlIENoSVAgc2FtcGxlIGFuZCBnZW5lcmF0ZSB0aGUgY3Jvc3MtY29ycmVsYXRpb24gcGxvdC4gRXhlY3V0aW9uIG9mIHRoZSBjb21tYW5kIGJlbG93IHNob3VsZCBjcmVhdGUgYSBwZGYgaW4geW91ciB3b3JraW5nIGRpcmVjdG9yeSBjYWxsZWQgQ3Jvc3NDb3JyZWxhdGlvbi5wZGYuCmBgYHtyfQpwZGYoZmlsZSA9ICIvVXNlcnMvZGFuaWVsYXF1aWphbm8vRG9jdW1lbnRzL05ZVSBNQVNURVJTL1NQUklORyAyMDIyL05HUyBDbGFzcy9Ib21ld29yay9jcm9zc2NvcnJlbGF0aW9uX2NoaXBiYW0ucGRmIiwgd2lkdGggPSA0LCBoZWlnaHQgPSA0KSAKY3Jvc3N2YWx1ZXNfQ2hpcCA8LSBnZXRDcm9zc0NvcnJlbGF0aW9uU2NvcmVzKCBjaGlwQmFtICwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjaGlwX2JpbmRpbmcuY2hhcmFjdGVyaXN0aWNzLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHJlYWRfbGVuZ3RoID0gMzYsCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgYW5ub3RhdGlvbklEPSJoZzE5IiwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzYXZlUGxvdFBhdGggPSAiLiIsCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgbWMgPSBtYykKZGV2Lm9mZigpCmBgYApgYGB7cn0KY2xhc3MoY3Jvc3N2YWx1ZXNfQ2hpcCkKY3Jvc3N2YWx1ZXNfQ2hpcApgYGAKCgojIyMgUTIuMWIgU2VsZWN0IGFsbCB0aGF0IGFyZSB0cnVlIHN0YXRlbWVudHMgYWJvdXQgdGhlIGNyb3NzLWNvcnJlbGF0aW9uIHByb2ZpbGU6CgphbGlnbmVkIHJlYWQgYXN5bW1ldHJpZXMgYmV0d2VlbiBETkEgc3RyYW5kcyBhcmUgdGhlIGJhc2lzIGZvciB0aGUgY3Jvc3MtY29ycmVsYXRpb24gcHJvZmlsZSBhcHByb2FjaCB0byBDaElQLXNlcSBRQwoKY29ycmVsYXRpb25zIGJldHdlZW4gc3RyYW5kLXNwZWNpZmljIGRlcHRocyBhcmUgcmVjYWxjdWxhdGVkIGFmdGVyIHBlcmZvcm1pbmcgYSDigJxzdHJhbmQgc2hpZnTigJ0KCmEgc2luZ2xlIGNvcnJlbGF0aW9uIGlzIGNhbGN1bGF0ZWQgYmV0d2VlbiBzdHJhbmQtc3BlY2lmaWMgZGVwdGgKCk5TQyB2YWx1ZXMgYWJvdmUgYSBwcmUtZGVmaW5lZCB0aHJlc2hvbGQgYXJlIG9mIGFjY2VwdGFibGUgcXVhbGl0eSBmb3IgZG93bnN0cmVhbSBhbmFseXNpcwoKIyMjIFEyLjJhIApUaGUgTlNDIHZhbHVlIGZvciB0aGUgY2hpcCBzYWxtcGxlIGlzIDEuNDQ3CgojIyMgUTIuMmIgV2hhdCBpcyB0aGUgUlNDIHZhbHVlcyBmb3IgdGhlIENoSVAgc2FtcGxlPwpUaGUgUlNDIChSZWxhdGl2ZSBTdHJhbmQgQ3Jvc3MgQ29ycmVsYXRpb24pIHZhbHVlcyBmb3IgdGhpcyBjaGlwIHNhbXBsZSBpcyAgMS4wNzkKCiMjIyBRMi4yYyBEbyBlaXRoZXIgb2YgdGhlIG1ldHJpY3MgaW5jb3Jwb3JhdGUgdGhlIOKAnHNoYWRkb3cgcGVha+KAnSBoZWlnaHQgaW4gaG93IHRoZXkgYXJlIGNhbGN1bGF0ZWQ/IFdoaWNoIG9uZShzKT8KVGhlIFJTQyB2YWx1ZSB0YWtlcyBpbnRvIGNvbnNpZGVyYXRpb24gdGhlIHJhdGlvIG9mIHRoZSBkaWZmZXJlbmNlIGZyb20gdGhlIENISVAgcGVhayBhbmQgdGhlIGJhY2tncm91bmQgYW5kIHRoZSBwaGFudG9tIHBlYWsgYW5kIHRoZSBiYWtjZ3JvdW5kLgoKIyMjIFEyLjJkIExhbmR0IGV0IGFsLiAyMDEyIChzZWUg4oCcQ3Jvc3MtY29ycmVsYXRpb24gQW5hbHlzaXPigJ0pIHByb3ZpZGUgbWluaW11bSBOU0MgYW5kIFJTQyB2YWx1ZXMgZm9yIGxpYnJhcmllcyB3aXRoIGFjY2VwdGFibGUgc2lnbmFsLXRvLW5vaXNlIHJhdGlvcy4gV2hhdCBhcmUgdGhlc2UgbWluaW11bSB2YWx1ZXMgYW5kIGRvZXMgdGhpcyBsaWJyYXJ5IHBhc3MgRU5DT0RFIHN0YW5kYXJkcyBmb3IgcXVhbGl0eSBjb250cm9sPyBTZWxlY3Qgb25lOgoKbWluaW11bSBOU0MgPSAxLjA1LCBtaW5pbXVtIFJTQyA9IDAuOCwgdGhlIGxpYnJhcnkgcGFzc2VzIFFDCgpgYGB7cn0KY3Jvc3N2YWx1ZXNfaW5wdXQgPC0gZ2V0Q3Jvc3NDb3JyZWxhdGlvblNjb3JlcyggaW5wdXRCYW0sCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgaW5wdXRfYmluZGluZy5jaGFyYWN0ZXJpc3RpY3MsCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcmVhZF9sZW5ndGggPSAzNiwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBhbm5vdGF0aW9uSUQ9ImhnMTkiLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHNhdmVQbG90UGF0aCA9ICIuIiwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBtYyA9IG1jKQpgYGAKYGBge3J9CmNsYXNzKGNyb3NzdmFsdWVzX2lucHV0KQpjcm9zc3ZhbHVlc19pbnB1dApgYGAKCgojIyMgUTIuM2EgV2hhdCBzdGVwcyBhcmUgdHlwaWNhbGx5IGluY2x1ZGVkL2V4Y2x1ZGVkIGluIHRoZSBwcmVwYXJhdGlvbiBvZiB0aGUgY29udHJvbC9pbnB1dCBzYW1wbGU/IChzZWUgV2VlayAxMSBwcmUtcmVjb3JkZWQgdmlkZW8pLiBTZWxlY3QgYWxsIHRydWUgc3RhdGVtZW50cy4KCmNocm9tYXRpbiBpbW11bm9wcmVjaXBhdGlvbiB3aXRoIGFuIGFwcHJvcHJpYXRlIGFudGlib2R5CgpXaXRoIHRoZSBpbnB1dCBzYW1wbGUsIGEgbm9uIHNwZWNpZmljIHB1bGxkb3duIGlzIGNvbmR1Y3RlZCBzb21ldGltZXMgd2l0aCBhIG1vY2sgSWdHLSBBbnkgSWdHIGltbXVub3ByZWNpcGl0YXRlZCBETkEgc2hvdWxkIHJlcHJlc2VudCBhIHJhbmRvbSwgbm9uc3BlY2lmaWMgcG9wdWxhdGlvbi4gCgojIyMgUTIuM2IgTlNDL1JTQyB2YWx1ZXMgZm9yIGlucHV0IHNhbXBsZQoKMS4wNCBOU0MKMC4yMTQgUlNDIChkdWUgdG8gbG93IFJTQyB2YWx1ZSB0aGlzIHdvdWxkIGhhdmUgZmFpbGVkIFFDKQoKIVtGaW5nZXJwcmludCBQbG90XSgvVXNlcnMvZGFuaWVsYXF1aWphbm8vRG9jdW1lbnRzL05ZVSBNQVNURVJTL1NQUklORyAyMDIyL05HUyBDbGFzcy9QbG90c19JbWFnZXMvQ2hJUENyb3NzQ29ycmVsYXRpb24ucG5nKQoKIVtGaW5nZXJwcmludCBQbG90XSgvVXNlcnMvZGFuaWVsYXF1aWphbm8vRG9jdW1lbnRzL05ZVSBNQVNURVJTL1NQUklORyAyMDIyL05HUyBDbGFzcy9QbG90c19JbWFnZXMvQ2hJUENyb3NzQ29ycmVsYXRpb25faW5wdXQucG5nKQoKIyMjIFEyLjQuIENoSUMgY2FsY3VsYXRlcyDigJxHbG9iYWwgTWV0cmljc+KAnSBmb3IgQ2hJUC1zZXEgcXVhbGl0eSBjb250cm9sLgpUaGVzZSBtZXRyaWNzIGNlbnRlciBhcm91bmQgdGhlIGZpbmdlcnByaW50IHBsb3QgYW5kIG5pbmUgbWV0cmljcyB0aGF0IGNhbiBiZSBkZXJpdmVkIGZyb20gc3VjaCBwbG90cyAKClRvIGdlbmVyYXRlIGEgZmluZ2VycHJpbnQgcGxvdCwgd2UgbmVlZCB0byBjYWxjdWxhdGUgc21vb3RoZWQgdGFnIChyZWFkKSBkZW5zaXR5IGRpc3RyaWJ1dGlvbnMuIEZpcnN0IHJlbW92ZSBhbm9tYWxpZXMgaW4gdGhlIEJBTXM6CgpgYGB7cn0Kc2VsZWN0ZWRUYWdzIDwtIHJlbW92ZUxvY2FsVGFnQW5vbWFsaWVzKGNoaXBCYW0saW5wdXRCYW0sY2hpcF9iaW5kaW5nLmNoYXJhY3RlcmlzdGljcykKCmBgYApgYGB7cn0KaW5wdXRCYW1TZWxlY3RlZCA8LSBzZWxlY3RlZFRhZ3MkaW5wdXQuZGF0YVNlbGVjdGVkCmNoaXBCYW1TZWxlY3RlZCA8LSBzZWxlY3RlZFRhZ3MkY2hpcC5kYXRhU2VsZWN0ZWQKYGBgCgpFeHRyYWN0IHRoZSDigJx0YWcgc2hpZnTigJ0gdmFsdWUgZnJvbSB0aGUgY3Jvc3MtY29ycmVsYXRpb24gb3V0cHV0LgoKYGBge3J9CmZpbmFsVGFnU2hpZnQgPC0gY3Jvc3N2YWx1ZXNfQ2hpcCR0YWcuc2hpZnQKc21vb3RoZWRDaGlwIDwtIHRhZ0RlbnNpdHkoY2hpcEJhbVNlbGVjdGVkLAogICAgICAgICAgICAgICAgICAgICAgICAgICBhbm5vdGF0aW9uSUQgPSAiaGcxOSIsCiAgICAgICAgICAgICAgICAgICAgICAgICAgIHRhZy5zaGlmdCA9IGZpbmFsVGFnU2hpZnQsIG1jID0gbWMpCnNtb290aGVkSW5wdXQgPC0gdGFnRGVuc2l0eShpbnB1dEJhbVNlbGVjdGVkLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgYW5ub3RhdGlvbklEID0gImhnMTkiLAogICAgICAgICAgICAgICAgICAgICAgICAgICB0YWcuc2hpZnQgPSBmaW5hbFRhZ1NoaWZ0LCBtYyA9IG1jKQpgYGAKCkNyZWF0ZSBhIGZpbmdlcnByaW50IHBsb3QgYW5kIGNhbGN1bGF0ZSBnbG9iYWwgZW5yaWNobWVudCBtZXRyaWNzCgpgYGB7cn0KQ2hfUmVzdWx0cyA8LSBxdWFsaXR5U2NvcmVzX0dNKHNlbGVjdGVkVGFnc0NoaXAgPSBjaGlwQmFtU2VsZWN0ZWQsCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzZWxlY3RlZFRhZ3NJbnB1dCA9IGlucHV0QmFtU2VsZWN0ZWQsCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzYXZlUGxvdFBhdGggPSAiLiIsCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB0YWcuc2hpZnQ9ZmluYWxUYWdTaGlmdCwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGFubm90YXRpb25JRD0naGcxOScpCmBgYApUaGUgZmluZ2VycHJpbnQgcGxvdCBwcm9kdWNlZDoKCiFbRmluZ2VycHJpbnQgUGxvdF0oL1VzZXJzL2RhbmllbGFxdWlqYW5vL0RvY3VtZW50cy9OWVUgTUFTVEVSUy9TUFJJTkcgMjAyMi9OR1MgQ2xhc3MvRmluZ2VyUHJpbnRQbG90LnBuZykKIyMjIEZpbmdlcnByaW50IHBsb3QgaW50ZXJwcmV0YXRpb24KCnRoZSBDaElQIHNhbXBsZSBpcyBoaWdoZXIgcXVhbGl0eSBiZWNhdXNlIGEgZ3JlYXRlciBwcm9wb3J0aW9uIG9mIHJlYWRzIGFyZSBpbiBoaWdoZXIgcmFua2VkIGJpbnMgKGkuZS4sIGJpbnMgcmFua2VkIGJ5IGRlcHRoKSB0aGFuIHRoZSBpbnB1dApOT1RFOiBUaGUgY2hpcCBsaWJyYXJ5IGlzIGFsc28gbW9yZSBjb21wbGV4IHRoYW4gdGhlIGlucHV0IHNpbmNlIGl0IGlzIGZhcnRoZXIgYXdheSBmcm9tIHRoZSBkaWFnbm9hbC4gQSB1bmlmb3JtIGxpYnJhcnkgd291bGQgYmUgbWFwcGVkIGNsb3NlciB0byB0aGUgZGlhZ29uYWwuCgoKQSBjb21tb24gd2F5IG9mIGV2YWx1YXRpbmcgcXVhbGl0eSBvZiBDaElQLXNlcSBkYXRhIGFuZCBnYWluaW5nIGJpb2xvZ2ljYWwgaW5zaWdodCBpbnRvIHRyYW5zY3JpcHRpb24gZmFjdG9ycyBvciBoaXN0b25lIG1hcmtzIGlzIHRvIGNyZWF0ZSBhIHByb2ZpbGUsIG9yIOKAnGVucmljaG1lbnTigJ0gcGxvdC4gQSBjb21tb24gdHlwZSBvZiBwbG90IGluIHRoaXMgY2F0ZWdvcnkgaXMgdGhlIFRyYW5zY3JpcHRpb24gU3RhcnQgU2l0ZSAoVFNTKSBwcm9maWxlIHBsb3Qgd2hpY2ggaXMgZGVzY3JpYmVkIGluIHRoZSBDaElDIHZpZ25ldHRlIGNhdGVnb3JpemVkIGFzIGEg4oCcTG9jYWwgRW5yaWNobWVudCBNZXRyaWMgKExNKeKAnS4KCkEgVFNTIHByb2ZpbGUgcGxvdCBmb3IgdGhlIHNhbXBsZSBhbmQgY29udHJvbCBCQU1zOgoKIVtUU1MgUGxvdF0oL1VzZXJzL2RhbmllbGFxdWlqYW5vL0RvY3VtZW50cy9OWVUgTUFTVEVSUy9TUFJJTkcgMjAyMi9OR1MgQ2xhc3MvVFNTX3Bsb3QucG5nKSAKCgojIyMgUTIuNS4KV2hhdCBpcyBzaG93biBpbiB0aGUgVFNTIHBsb3Q/IFBsZWFzZSBwcm92aWRlIGEgZGV0YWlsZWQgaW50ZXJwcmV0YXRpb24gb2YgdGhlIHBsb3QuIEJhc2VkIG9uIHRoZSBUU1MgcHJvZmlsZSBwbG90LCBkZXNjcmliZSB3aGVyZSBhcmUgSDNLMzZtZTMgbW9kaWZpY2F0aW9ucyB0eXBpY2FsbHkgbG9jYXRlZCByZWxhdGl2ZSB0byBwcm90ZWluIGNvZGluZyBnZW5lcy4gCkVucmljaG1lbnQgc2hvdWxkIGluY3JlYXNlIHRvIGEgc2luZ2xlIHBlYWsgbmVhciBUU1MuIEluIHRoaXMgY2FzZSwgdGhlIGF2ZXJhZ2UgZGVwdGggYXJvdW5kIHRoZSB0cmFuc2NyaXB0aW9uIHN0YXJ0IHNpdGUgcGVha3MgYXQgYXJvdW5kIDQwMCBhbmQgMTAwIGJhc2VzIGFyb3VuZCB0aGUgdHJhbnNjcmlwdGlvbiBzdGFydCBzaXRlLXRoZXNlIGxvY2F0aW9ucyBjb3JyZXNwb25kIHRvIHRoZSBsb2NhdGlvbiBvZiBIM0s2bWUzIG1vZGlmaWNhdGlvbnMuIAo=</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="module" src="https://s.brightspace.com/lib/bsi/20.22.5-185/unbundled/mathjax.js"></script><script type="text/javascript">document.addEventListener('DOMContentLoaded', function() {
+					if (document.querySelector('math') || /\$\$|\\\(|\\\[|\\begin{|\\ref{|\\eqref{/.test(document.body.innerHTML)) {
+						document.querySelectorAll('mspace[linebreak="newline"]').forEach(elm => {
+							elm.setAttribute('style', 'display: block; height: 0.5rem;');
+						});
+
+						window.D2L.MathJax.loadMathJax({
+							'outputScale': 1.3,
+							'renderLatex': true
+						});
+					}
+				});</script></body></html>
