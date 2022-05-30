@@ -9,6 +9,9 @@ This folder contains the projects completed in the course 'Next Generation Seque
 ## NGS Bash scripts
 This folder contains the slurm scripts that were used in order to conduct the different kinds of analyses that were done. 
 
+## NGS Final Project: Differential Gene Expression Analysis as a response to NRDE2-targeting siRNAs in MDA-MB-231 breast cancer cell lines
+This folder contains the final project for the course. 
+
 ### Align reads to the human reference genome (W3)
 -prepare a copy human reference genome for short read alignment with the Burrows-Wheeler Aligner BWA-MEM (Homo_sapiens.GRCh38), normalize using  Picard-Tools NormalizeFasta program: https://broadinstitute.github.io/picard/command-line-overview.html#NormalizeFasta. Picard removes any white spaces in sequence identifers in the reference FASTA.<br> 
 -Create a FASTA index and a bwa index for the normalized reference genome as well as dictionary file required by the Genome Analysis Toolkit (GATK).<br> 
